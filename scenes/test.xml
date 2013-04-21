@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene>
+	<ambience>
+		<colour r="0.1" g="0.1" b="0.1" />
+	</ambience>
+	
+	<maxdepth>16</maxdepth>
+
+	<viewpoint>
+		<position x="188.0" y="100.0" z="-600.000" />							
+	</viewpoint>
+	
+	<animation frames="50">
+		<to>
+			<position x="400.0" y="200.0" z="-600.000" />					
+		</to>
+	</animation>
+	
+	<lookat>
+		<position x="188.0" y="100.0" z="0.0" />
+	</lookat>
+	
+	<objects>
+
+		<light radius="80" brightness="0.5">
+			<position x="500.0" y="1500.0" z="0.0" />
+			<colour r="1.0" g="1.0" b="1.0" />
+			<optics refraction="0"
+					transparency="0.0"
+					reflection="0.5"
+					diffusion="0.5"
+					luminous="true"
+			/>			
+		</light>
+		
+
+		<sphere radius="10">
+			<position x="0.0" y="0.0" z="0.0" />			
+			<colour r="0.0" g="0.0" b="1.0" />
+			<optics refraction="0"
+					transparency="0.0"
+					reflection="0.5"
+					diffusion="0.4"
+					luminous="false"
+			/>
+		</sphere>
+		<sphere radius="30">
+			<position x="36.25" y="16.9" z="0.0" />			
+			<colour r="0.0" g="0.0" b="1.0" />
+			<optics refraction="0"
+					transparency="0.0"
+					reflection="0.5"
+					diffusion="0.4"
+					luminous="false"
+			/>
+		</sphere>
+		<sphere radius="50">
+			<position x="108.75" y="50.71" z="0.0" />			
+			<colour r="0.0" g="0.0" b="1.0" />
+			<optics refraction="0"
+					transparency="0.0"
+					reflection="0.5"
+					diffusion="0.4"
+					luminous="false"
+			/>
+		</sphere>		
+		
+		<sphere radius="70">
+			<position x="217.51" y="101.43" z="0.0" />			
+			<colour r="0.0" g="0.0" b="1.0" />
+			<optics refraction="0"
+					transparency="0.0"
+					reflection="0.5"
+					diffusion="0.4"
+					luminous="false"
+			/>
+		</sphere>
+		<sphere radius="90">
+			<position x="362.52" y="169.05" z="0.0" />			
+			<colour r="0.0" g="0.0" b="1.0" />
+			<optics refraction="0"
+					transparency="0.0"
+					reflection="0.5"
+					diffusion="0.4"
+					luminous="false"
+			/>
+		</sphere>	
+											
+	</objects>
+</scene>
