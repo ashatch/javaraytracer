@@ -15,17 +15,19 @@ public class Camera {
   private Vector eyePosition;
   private double fov;
 
-  private double viewport_xsize;
-  private double viewport_ysize;
+  private double viewportXSize;
+  private double viewportYSsize;
 
-  private Vector _dir, upWithScale, rightWithScale;
-  private Vector lookat_target;
+  private Vector dir;
+  private Vector upWithScale;
+  private Vector rightWithScale;
+  private Vector lookAtTarget;
 
   public Camera() {
     this(new Dimension(640, 480));
   }
 
-  public Camera(Dimension viewport_size) {
+  public Camera(final Dimension viewportSize) {
 
     eyePosition = new Vector(0, -5, 1);
 
@@ -34,32 +36,31 @@ public class Camera {
     left = new Vector(LEFT);
 
     fov = 40;
-    viewport_xsize = viewport_size.getWidth();
-    viewport_ysize = viewport_size.getHeight();
+    viewportXSize = viewportSize.getWidth();
+    viewportYSsize = viewportSize.getHeight();
 
     updateVectors();
 
   }
 
-  public void setViewportSize(Dimension size) {
-    viewport_xsize = size.getWidth();
-    viewport_ysize = size.getHeight();
+  public void setViewportSize(final Dimension size) {
+    viewportXSize = size.getWidth();
+    viewportYSsize = size.getHeight();
     updateVectors();
   }
 
-  public void setViewpoint(Vector eyePosition) {
+  public void setViewpoint(final Vector eyePosition) {
     this.eyePosition = eyePosition;
-    //updateVectors(); // now done in setLookAt
-    if (lookat_target != null) {
-      setLookAt(lookat_target);
+
+    if (lookAtTarget != null) {
+      setLookAt(lookAtTarget);
     }
   }
 
-  public void setLookAt(Vector focusedPosition) {
-    this.lookat_target = new Vector(focusedPosition);
+  public void setLookAt(final Vector focusedPosition) {
+    this.lookAtTarget = new Vector(focusedPosition);
     front = focusedPosition.subtractNew(eyePosition);
     left = front.crossProductNew(UP);
-    // should we do something with up here?
     updateVectors();
   }
 
@@ -68,47 +69,38 @@ public class Camera {
     left.normalise();
     front.normalise();
 
-    double fovFactor = viewport_xsize / viewport_ysize;
+    double fovFactor = viewportXSize / viewportYSsize;
 
-    _dir = front.multiplyNew(0.5);
+    dir = front.multiplyNew(0.5);
     upWithScale = up.multiplyNew(Math.tan(Math.toRadians(fov / 2)));
     rightWithScale = left.multiplyNew(-fovFactor * Math.tan(Math.toRadians(fov / 2)));
   }
 
-  public final Ray generateRay(Scene s, double x, double y) {
-    double u, v;
-    //double mi_x, mi_y;
+  public final Ray generateRay(final Scene scene,
+                               final double xpos,
+                               final double ypos) {
+    final double u = (xpos - viewportXSize / 2.0) / viewportXSize;
+    final double v = ((viewportYSsize - ypos - 1) - viewportYSsize / 2.0) / viewportYSsize;
 
-    // 1. Convert integer image coordinates into values in the range [-0.5, 0.5]
-    u = (x - viewport_xsize / 2.0) / viewport_xsize;
-    v = ((viewport_ysize - y - 1) - viewport_ysize / 2.0) / viewport_ysize;
+    final Vector dv = upWithScale.multiplyNew(v);
+    final Vector du = rightWithScale.multiplyNew(u);
+    final Vector dir = dv.addNew(du).addNew(this.dir);
 
-
-    Vector dv = upWithScale.multiplyNew(v);
-    Vector du = rightWithScale.multiplyNew(u);
-    Vector dir = dv.addNew(du).addNew(_dir);
-
-
-    // 3. Build up and return a ray with origin in the eye position and with calculated direction
-    Ray ray;
-
-    ray = new Ray(s, eyePosition.toPoint(), dir, 0);
-
-    return ray;
+    return new Ray(scene, eyePosition.toPoint(), dir, 0);
   }
 
-  public final Ray[][] generateSupersampledRays(Scene s, int x, int y, int side, double f) {
-    Ray[][] r = new Ray[side * 2 + 1][side * 2 + 1];
+  public final Ray[][] generateSupersampledRays(final Scene scene, int xpos, int ypos, int side, double f) {
+    final Ray[][] rays = new Ray[side * 2 + 1][side * 2 + 1];
 
     for (int i = -side; i <= side; i++) {
       for (int j = -side; j <= side; j++) {
-        int x_index = side + i;
-        int y_index = side + j;
-        r[x_index][y_index] = generateRay(s, x + i / f, y + j / f);
+        int indexX = side + i;
+        int indexY = side + j;
+        rays[indexX][indexY] = generateRay(scene, xpos + i / f, ypos + j / f);
       }
     }
 
-    return r;
+    return rays;
   }
 
 

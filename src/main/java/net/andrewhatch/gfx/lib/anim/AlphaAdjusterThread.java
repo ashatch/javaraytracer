@@ -1,18 +1,16 @@
 package net.andrewhatch.gfx.lib.anim;
 
-import net.andrewhatch.gfx.lib.DrawableElement;
-
 public class AlphaAdjusterThread implements Runnable {
-  protected Thread t;
-  protected float duration_millis;
+  protected Thread thread;
+  protected float durationMillis;
 
-  public AlphaAdjusterThread(DrawableElement de, float duration_millis) {
-    this.duration_millis = duration_millis;
+  public AlphaAdjusterThread(final float durationMillis) {
+    this.durationMillis = durationMillis;
   }
 
   public void start() {
-    t = new Thread(this);
-    t.start();
+    thread = new Thread(this);
+    thread.start();
   }
 
   public void run() {

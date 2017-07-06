@@ -27,7 +27,7 @@ public class AnimatedBackground extends DrawableElement {
     this.height = height;
   }
 
-  public void draw(final Graphics2D gfx, final long tick_count) {
+  public void draw(final Graphics2D gfx, final long tickCount) {
     gfx.setComposite(getAlphaComposite());
     gfx.setColor(colour);
     gfx.fillRect(0, 0, width, height);

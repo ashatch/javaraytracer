@@ -13,8 +13,7 @@ public class Sphere extends SceneObject {
 
   protected Point center;
   protected double radius;
-  protected double radius_squared;
-  protected Vector normal;
+  protected double radiusSquared;
   protected RayHitInfo hit;
 
   public Sphere() {
@@ -28,14 +27,14 @@ public class Sphere extends SceneObject {
 
   public void setRadius(double radius) {
     this.radius = radius;
-    this.radius_squared = radius * radius;
+    this.radiusSquared = radius * radius;
   }
 
   public void set(Point center, double radius, OpticalProperties optics) {
     this.center = center;
     setRadius(radius);
     this.optic_properties = optics;
-    this.radius_squared = radius * radius;
+    this.radiusSquared = radius * radius;
   }
 
   public Point getCenter() {
@@ -49,7 +48,7 @@ public class Sphere extends SceneObject {
   public RayHitInfo intersect(Ray r) {
     Vector oc = new Vector(center, r.origin);
     double oc2 = oc.dotproduct(oc);
-    double dist2 = oc2 - radius_squared;
+    double dist2 = oc2 - radiusSquared;
 
     if (dist2 <= Vector.EPSILON && dist2 >= -Vector.EPSILON) {
       return null;
@@ -61,7 +60,7 @@ public class Sphere extends SceneObject {
       return null;
     }
 
-    double hc2 = radius_squared - oc2 + tca * tca;
+    double hc2 = radiusSquared - oc2 + tca * tca;
 
     if (hc2 < 0.0) {
       return null;

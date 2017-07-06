@@ -11,5 +11,4 @@ public class HitInfo {
   Vector normal;   // Surface normal (set by Intersect).
   Vector uv;       // Texture coordinates (set by intersect).
   Ray ray;         // The ray that hit the surface (set by Intersect).
-
 }

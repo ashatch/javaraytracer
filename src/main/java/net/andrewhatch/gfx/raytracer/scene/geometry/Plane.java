@@ -12,17 +12,19 @@ import net.andrewhatch.gfx.raytracer.shaders.Shader;
 
 public class Plane extends SceneObject {
   // geometry
-  Point center;
-  Vector normal;
+  private Point center;
+  private Vector normal;
 
-  double cos_inv;
-  RayHitInfo hit;
+  private double cos_inv;
+  private RayHitInfo hit;
 
   public Plane() {
     super();
   }
 
-  public Plane(Point center, Vector perpendicular, OpticalProperties prop) {
+  public Plane(final Point center,
+               final Vector perpendicular,
+               final OpticalProperties prop) {
     super();
     this.center = center;
     this.optic_properties = prop;
@@ -30,12 +32,12 @@ public class Plane extends SceneObject {
     update();
   }
 
-  public void setCenter(Point center) {
+  public void setCenter(final Point center) {
     this.center = center;
     update();
   }
 
-  public void setPerpendicular(Vector perp) {
+  public void setPerpendicular(final Vector perp) {
     this.normal = new Vector(perp);
     update();
   }
@@ -48,15 +50,15 @@ public class Plane extends SceneObject {
   }
 
 
-  public Colour getPixel(Point p) {
+  public Colour getPixel(final Point p) {
     return this.optic_properties.colour;
   }
 
-  public Vector getNormal(Point intersect) {
+  public Vector getNormal(final Point intersect) {
     return normal;
   }
 
-  public RayHitInfo intersect(Ray ray) {
+  public RayHitInfo intersect(final Ray ray) {
     double inc = ray.getDirection().dotproduct(normal);
     if (inc >= Vector.EPSILON) {
       return null;
@@ -70,9 +72,9 @@ public class Plane extends SceneObject {
       hit = new RayHitInfo();
       hit.distance = t;
 
-      Vector tmp = new Vector(ray.getDirection());
+      final Vector tmp = new Vector(ray.getDirection());
       tmp.scale(hit.distance);
-      Point intersect = new Point(ray.getOrigin());
+      final Point intersect = new Point(ray.getOrigin());
       intersect.add(tmp.toPoint());
       hit.intersect = intersect;
       hit.normal = this.normal;
