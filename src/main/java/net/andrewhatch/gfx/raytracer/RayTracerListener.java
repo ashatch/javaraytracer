@@ -1,11 +1,11 @@
 package net.andrewhatch.gfx.raytracer;
 
 public interface RayTracerListener {
-  public void traceStarted();
+  void traceStarted();
 
-  public void traceFinished();
+  void traceFinished();
 
-  public void traceAborted();
+  void traceAborted();
 
-  public void tracedLine(int line_completed);
+  void tracedLine(final int lineCompleted);
 }

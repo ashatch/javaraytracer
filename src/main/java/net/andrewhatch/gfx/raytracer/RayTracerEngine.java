@@ -31,25 +31,24 @@ public class RayTracerEngine implements ImageProducer, Runnable {
   private boolean finished = true;
   private double percent_complete = 0.0;
 
-  public RayTracerEngine(Dimension image_size) {
+  public RayTracerEngine(final Dimension image_size) {
     this(image_size, null, null);
   }
 
-  public RayTracerEngine(Dimension image_size, Scene scene, Camera camera) {
+  public RayTracerEngine(final Dimension image_size, final Scene scene, final Camera camera) {
     this.scene = scene;
     this.camera = camera;
     this.width = image_size.width;
     this.height = image_size.height;
     forward = new Vector(0, 0, 1);  //away in left handed univ.
     forward.normalise();
-
   }
 
-  public void setSuperSampling(boolean flag) {
+  public void setSuperSampling(final boolean flag) {
     this.supersampling = flag;
   }
 
-  public void setRayTracerListener(RayTracerListener l) {
+  public void setRayTracerListener(final RayTracerListener l) {
     this.rtl = l;
   }
 
@@ -64,7 +63,7 @@ public class RayTracerEngine implements ImageProducer, Runnable {
     t.start();
   }
 
-  public void addConsumer(ImageConsumer ic) {
+  public void addConsumer(final ImageConsumer ic) {
     consumer = ic;
     consumer.setColorModel(ColorModel.getRGBdefault());
     consumer.setDimensions(width, height);
@@ -72,23 +71,23 @@ public class RayTracerEngine implements ImageProducer, Runnable {
     consumer = ic;
   }
 
-  public boolean isConsumer(ImageConsumer ic) {
+  public boolean isConsumer(final ImageConsumer ic) {
     return consumer == ic;
 
   }
 
-  public void removeConsumer(ImageConsumer ic) {
+  public void removeConsumer(final ImageConsumer ic) {
     consumer = null;
   }
 
-  public void startProduction(ImageConsumer ic) {
+  public void startProduction(final ImageConsumer ic) {
     addConsumer(ic);
     if (lines_produced == height) {
       requestTopDownLeftRightResend(consumer);
     }
   }
 
-  public void requestTopDownLeftRightResend(ImageConsumer ic) {
+  public void requestTopDownLeftRightResend(final ImageConsumer ic) {
     ic.setHints(ImageConsumer.TOPDOWNLEFTRIGHT);
     ic.setPixels(0, 0, width, lines_produced, ColorModel.getRGBdefault(), pixels.getPixels(), 0, width);
     lines_consumed = lines_produced;
@@ -98,9 +97,6 @@ public class RayTracerEngine implements ImageProducer, Runnable {
   }
 
   public void run() {
-
-    //System.out.println(this.scene);
-
     if (rtl != null) {
       rtl.traceStarted();
     }

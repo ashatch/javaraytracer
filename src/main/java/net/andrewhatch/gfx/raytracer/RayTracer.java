@@ -113,7 +113,7 @@ public class RayTracer implements RayTracerListener {
 		System.out.println("Ray Tracing aborted");
 	}
 
-	public void tracedLine(int line_completed) {
+	public void tracedLine(int lineCompleted) {
 
 	}
 }
