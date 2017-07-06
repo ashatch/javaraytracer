@@ -6,25 +6,25 @@ import java.util.Map;
 
 public class GraphicalSwitch extends DrawableElement {
 
-	Map<String, DrawableElement> items;
-	DrawableElement current_item;
-	String current_item_name;
-	
-	public GraphicalSwitch() {
-		items = new HashMap<String, DrawableElement>();
-	}
-	
-	public void add(String name, DrawableElement el) {
-		this.items.put(name, el);
-	}
-	
-	public void setCurrent(String name) {
-		current_item_name = name;
-		current_item = items.get(name);
-	}
-	
-	public void draw(Graphics2D gfx, long tick_count) {
-		current_item.draw(gfx, tick_count);
-	}
+  private Map<String, DrawableElement> items;
+  private DrawableElement current_item;
+  private String current_item_name;
+
+  public GraphicalSwitch() {
+    items = new HashMap<String, DrawableElement>();
+  }
+
+  public void add(final String name, final DrawableElement el) {
+    this.items.put(name, el);
+  }
+
+  public void setCurrent(final String name) {
+    current_item_name = name;
+    current_item = items.get(name);
+  }
+
+  public void draw(final Graphics2D gfx, final long tick_count) {
+    current_item.draw(gfx, tick_count);
+  }
 
 }

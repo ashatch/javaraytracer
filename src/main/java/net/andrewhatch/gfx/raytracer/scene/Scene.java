@@ -5,68 +5,68 @@ import java.util.List;
 
 
 public class Scene {
-	
-	private Light light;
-	
-	private int max_depth = 4;
-	private boolean superSampling = false;
-	
-	private List<SceneObject> objs = new ArrayList<SceneObject>();
-	private Lighting lights;
-	private Colour ambient_colour;
-	
-	public Scene() {		
-	}
 
-	public void addSceneObject(SceneObject obj) {
-		obj.setScene(this);
-		objs.add(obj);
-	}
-	
-	public List<SceneObject> getSceneObjects() {		
-		return objs;
-	}
-	
-	public void setLight(Point lightpoint) {	
-	    Point center = new Point(lightpoint);		
-		light = new Light(center);
-		addSceneObject(light);		
-	}
-	
-	public void setMaxDepth(int max_depth) {
-		this.max_depth = max_depth;
-	}
-	
-	public int getMaxDepth() {
-		return max_depth;
-	}
+  private Light light;
 
-	public Colour getAmbientColour() {
-		return ambient_colour;
-	}
+  private int max_depth = 4;
+  private boolean superSampling = false;
 
-	public void setAmbientColour(Colour ambient_colour) {
-		this.ambient_colour = ambient_colour;
-	}
-	
-	public String toString() {
-		return "scene[" + light + " " + max_depth + ", " + ambient_colour + "," + objs + ", " + lights +  "]";
-	}
+  private List<SceneObject> objs = new ArrayList<SceneObject>();
+  private Lighting lights;
+  private Colour ambient_colour;
 
-	public void setLighting(Lighting lighting) {
-		this.lights = lighting;
-		
-	}
-	
-	public Lighting getLighting() {
-		return lights;
-	}
+  public Scene() {
+  }
 
-	public boolean isSuperSampling() {
-		return superSampling;
-	}
+  public void addSceneObject(SceneObject obj) {
+    obj.setScene(this);
+    objs.add(obj);
+  }
 
-	public void setSuperSampling(boolean superSampling) {
-		this.superSampling = superSampling;
-	}
+  public List<SceneObject> getSceneObjects() {
+    return objs;
+  }
+
+  public void setLight(Point lightpoint) {
+    Point center = new Point(lightpoint);
+    light = new Light(center);
+    addSceneObject(light);
+  }
+
+  public int getMaxDepth() {
+    return max_depth;
+  }
+
+  public void setMaxDepth(int max_depth) {
+    this.max_depth = max_depth;
+  }
+
+  public Colour getAmbientColour() {
+    return ambient_colour;
+  }
+
+  public void setAmbientColour(Colour ambient_colour) {
+    this.ambient_colour = ambient_colour;
+  }
+
+  public String toString() {
+    return "scene[" + light + " " + max_depth + ", " + ambient_colour + "," + objs + ", " + lights + "]";
+  }
+
+  public Lighting getLighting() {
+    return lights;
+  }
+
+  public void setLighting(Lighting lighting) {
+    this.lights = lighting;
+
+  }
+
+  public boolean isSuperSampling() {
+    return superSampling;
+  }
+
+  public void setSuperSampling(boolean superSampling) {
+    this.superSampling = superSampling;
+  }
 }

@@ -6,62 +6,59 @@ import java.awt.Composite;
 import java.awt.Graphics2D;
 
 public abstract class DrawableElement {
-	
-	protected float opacity = 1.0f;
-	protected int x;
-	protected int y;
-	protected int z;
-	protected Color colour;
 
-	public DrawableElement() {}
-	
-	public abstract void draw(Graphics2D gfx, long tick_count);
-	
+  protected float opacity = 1.0f;
+  protected int x;
+  protected int y;
+  protected int z;
+  protected Color colour;
 
-	/*** Utility Methods ***/
-	protected Composite getAlphaComposite() {
-		return AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity);
-	}
-	
-	/*** GETTERS AND SETTERS ****/
-	
-	public float getOpacity() {
-		return opacity;
-	}
+  public DrawableElement() {
+  }
 
-	public void setOpacity(float opacity) {
-		this.opacity = opacity;
-	}
+  public abstract void draw(Graphics2D gfx, long tick_count);
 
-	public int getX() {
-		return x;
-	}
+  protected Composite getAlphaComposite() {
+    return AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity);
+  }
 
-	public void setX(int x) {
-		this.x = x;
-	}
+  public float getOpacity() {
+    return opacity;
+  }
 
-	public int getY() {
-		return y;
-	}
+  public void setOpacity(final float opacity) {
+    this.opacity = opacity;
+  }
 
-	public void setY(int y) {
-		this.y = y;
-	}
+  public int getX() {
+    return x;
+  }
 
-	public int getZ() {
-		return z;
-	}
+  public void setX(final int x) {
+    this.x = x;
+  }
 
-	public void setZ(int z) {
-		this.z = z;
-	}
+  public int getY() {
+    return y;
+  }
 
-	public Color getC() {
-		return colour;
-	}
+  public void setY(final int y) {
+    this.y = y;
+  }
 
-	public void setC(Color colour) {
-		this.colour = colour;
-	}	
+  public int getZ() {
+    return z;
+  }
+
+  public void setZ(final int z) {
+    this.z = z;
+  }
+
+  public Color getColour() {
+    return colour;
+  }
+
+  public void setColour(final Color colour) {
+    this.colour = colour;
+  }
 }

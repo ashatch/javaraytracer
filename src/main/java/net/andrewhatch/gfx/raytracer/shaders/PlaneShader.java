@@ -7,18 +7,18 @@ import net.andrewhatch.gfx.raytracer.scene.Scene;
 import net.andrewhatch.gfx.raytracer.scene.geometry.Plane;
 
 public class PlaneShader extends PhongShader {
-	
-	protected Colour  pixel;
-	
-	public PlaneShader(Scene scene, Ray incident_ray, RayHitInfo hit, Plane obj) {
-		super(scene, incident_ray, hit, obj);
-		this.pixel = obj.getPixel(intersect);
-	}
 
-	public void getColour(Colour c) {
-	    super.getColour(c);
-	    c.attenuate(pixel);		
-	}
+  protected Colour pixel;
+
+  public PlaneShader(Scene scene, Ray incident_ray, RayHitInfo hit, Plane obj) {
+    super(scene, incident_ray, hit, obj);
+    this.pixel = obj.getPixel(intersect);
+  }
+
+  public void getColour(Colour c) {
+    super.getColour(c);
+    c.attenuate(pixel);
+  }
 
 }
 
