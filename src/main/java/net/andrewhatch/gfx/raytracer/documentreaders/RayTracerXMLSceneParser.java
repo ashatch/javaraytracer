@@ -1,4 +1,4 @@
-package net.andrewhatch.gfx.raytracer.parser;
+package net.andrewhatch.gfx.raytracer.documentreaders;
 
 import net.andrewhatch.gfx.raytracer.scene.Camera;
 import net.andrewhatch.gfx.raytracer.scene.CameraAnimation;
@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 
-public class RayTracerXMLSceneParser extends DefaultHandler {
+public class RayTracerXMLSceneParser extends DefaultHandler implements GenericSceneParser {
 
   public static final String SCENE = "scene";
   public static final String AMBIENCE = "ambience";
@@ -67,9 +67,13 @@ public class RayTracerXMLSceneParser extends DefaultHandler {
     }
   }
 
-  public void parse(String xmlstring) throws SAXException, IOException {
+  public void parse(String xmlstring) {
     this.scene = new Scene();
-    reader.parse(new InputSource(new StringReader(xmlstring)));
+    try {
+      reader.parse(new InputSource(new StringReader(xmlstring)));
+    } catch (final SAXException | IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public Scene getScene() {
