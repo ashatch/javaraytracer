@@ -1,6 +1,8 @@
 package net.andrewhatch.gfx.raytracer;
 
 import com.google.common.base.Charsets;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
 
 import net.andrewhatch.gfx.raytracer.documentreaders.AshSceneParser;
 import net.andrewhatch.gfx.raytracer.documentreaders.GenericSceneParser;
@@ -9,16 +11,16 @@ import net.andrewhatch.gfx.raytracer.scene.Camera;
 import net.andrewhatch.gfx.raytracer.scene.CameraAnimation;
 import net.andrewhatch.gfx.raytracer.scene.Scene;
 import net.andrewhatch.gfx.raytracer.scene.Vector;
-import net.andrewhatch.gfx.raytracer.utils.FileUtils;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 
 public class RayTracer implements RayTracerListener {
@@ -34,10 +36,13 @@ public class RayTracer implements RayTracerListener {
   private boolean animate = false;
 
   public static void main(String[] args) throws IOException {
-    new RayTracer(args[0]);
+    Guice.createInjector(new AbstractModule() {
+      @Override
+      protected void configure() {}
+    }).getInstance(RayTracer.class).go(args[0]);
   }
 
-  public RayTracer(String doc) throws IOException {
+  public void go(String doc) throws IOException {
     parser = getParser(doc);
 
     parser.parse(new String(Files.readAllBytes(Paths.get(doc)), Charsets.UTF_8));
@@ -50,7 +55,7 @@ public class RayTracer implements RayTracerListener {
 
     Camera c = parser.getCamera();
     c.setViewportSize(image_size);
-    c.setViewpoint(cam_pos);
+    c.setPosition(cam_pos);
 
     tracer = new RayTracerEngine(image_size, parsed_scene, c);
     tracer.setSuperSampling(parsed_scene.isSuperSampling());
@@ -79,7 +84,7 @@ public class RayTracer implements RayTracerListener {
   public void setupForFrame() {
     Vector cam_pos = animation.getCameraPositionForFrame(frame);
     Camera c = parser.getCamera();
-    c.setViewpoint(cam_pos);
+    c.setPosition(cam_pos);
     tracer.setCamera(c);
     display.reset();
     display.repaint();

@@ -2,7 +2,7 @@ package net.andrewhatch.gfx.raytracer.scene;
 
 import net.andrewhatch.gfx.raytracer.shaders.Shader;
 
-public abstract class SceneObject {
+public abstract class SceneObject implements Positionable {
 
   protected OpticalProperties optic_properties;
   protected Scene scene;

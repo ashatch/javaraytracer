@@ -89,6 +89,10 @@ public class Sphere extends SceneObject {
     return hit;
   }
 
+  public double getRadius() {
+    return radius;
+  }
+
   public Vector getNormal(Point intersect) {
     return hit.normal;
   }
@@ -101,4 +105,8 @@ public class Sphere extends SceneObject {
     return this.getClass().getName() + radius + "@" + center + this.optic_properties;
   }
 
+  @Override
+  public void setPosition(Vector position) {
+    this.center = position.toPoint();
+  }
 }

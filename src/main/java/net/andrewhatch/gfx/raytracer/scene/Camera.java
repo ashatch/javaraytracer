@@ -3,7 +3,7 @@ package net.andrewhatch.gfx.raytracer.scene;
 import java.awt.Dimension;
 
 
-public class Camera {
+public class Camera implements Positionable {
 
   private static final Vector UP = new Vector(0, 1, 0);
   private static final Vector FRONT = new Vector(0, 0, 1);
@@ -49,7 +49,8 @@ public class Camera {
     updateVectors();
   }
 
-  public void setViewpoint(final Vector eyePosition) {
+  @Override
+  public void setPosition(final Vector eyePosition) {
     this.eyePosition = eyePosition;
 
     if (lookAtTarget != null) {
@@ -62,6 +63,10 @@ public class Camera {
     front = focusedPosition.subtractNew(eyePosition);
     left = front.crossProductNew(UP);
     updateVectors();
+  }
+
+  public Vector getLookAt() {
+    return lookAtTarget;
   }
 
   public void updateVectors() {

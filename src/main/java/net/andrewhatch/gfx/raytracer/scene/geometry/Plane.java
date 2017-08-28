@@ -92,4 +92,9 @@ public class Plane extends SceneObject {
   public String toString() {
     return "PLANE";
   }
+
+  @Override
+  public void setPosition(Vector position) {
+    this.center = position.toPoint();
+  }
 }

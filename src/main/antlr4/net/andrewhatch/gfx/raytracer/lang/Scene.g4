@@ -11,6 +11,8 @@ scene
 definition
     : cameraDefinition
     | lightDefinition
+    | sphereDefinition
+    | opticsDefinition
     ;
 
 lightDefinition
@@ -21,20 +23,33 @@ cameraDefinition
     : Camera LeftBrace statementList RightBrace
     ;
 
+sphereDefinition
+    : Sphere LeftBrace statementList RightBrace
+    ;
+
+opticsDefinition
+    : OpticsDef Identifier LeftBrace opticsStatementList RightBrace
+    ;
+
 statementList
     : (statement LineEnd)+
+    ;
+
+opticsStatementList
+    : (opticsStatement LineEnd)+
     ;
 
 statement
     : vectorDeclaration
     | diameterDeclaration
     | brightnessDeclaration
-    | colourDeclaration
+    | ambienceDeclaration
     | positionDeclaration
+    | lightAssignment
     ;
 
 vectorDeclaration
-    : Vector floatList
+    : Vector Float Float Float
     ;
 
 diameterDeclaration
@@ -45,16 +60,12 @@ brightnessDeclaration
     : Brightness Float
     ;
 
-colourDeclaration
-    : colourKey floatList
-    ;
-
 positionDeclaration
     : positionKey floatList
     ;
 
-colourKey
-    : 'ambience'
+lightAssignment
+    : Lambda Identifier
     ;
 
 positionKey
@@ -62,6 +73,32 @@ positionKey
     | 'to'
     | 'lookAt'
     ;
+
+ambienceDeclaration
+    : 'ambience' floatList
+    ;
+
+opticsStatement
+    : refractionDeclaration
+    | transparencyDeclaration
+    | reflectionDeclaration
+    | diffusionDeclaration
+    | luminousDeclaration
+    | colourDeclaration
+    ;
+
+refractionDeclaration: 'refraction' Float;
+transparencyDeclaration: 'transparency' Float;
+reflectionDeclaration: 'reflection' Float;
+diffusionDeclaration: 'diffusion' Float;
+luminousDeclaration: 'luminous' BooleanValue;
+colourDeclaration: 'colour' Float Float Float;
+
+BooleanValue
+    : TrueValue
+    | FalseValue
+    ;
+
 
 floatList
     : Float (Float)*
@@ -72,10 +109,6 @@ Float
     ;
 
 
-String
-    : '"' ('""'|~'"')* '"'
-    ; // quote-quote is an escaped quote
-
 Comment
     : '//' ~ [\r\n]*
     ;
@@ -83,6 +116,8 @@ Comment
 BlockComment
     : '/*' .*? '*/' -> skip
     ;
+
+Identifier : [a-z][a-zA-Z]+;
 
 Separator: ',';
 LineEnd : ';';
@@ -92,9 +127,16 @@ LeftBrace: '{';
 RightBrace: '}';
 
 Camera: '†';
-Light: '⏣';
+Light: '☼';
+Sphere: '◯';
 Vector: '→';
 Diameter: 'Ø';
 Brightness: 'Γ';
+Lambda: 'λ';
+Optics: 'optics';
+OpticsDef: 'optics:';
+
+TrueValue: 'yes';
+FalseValue: 'no';
 
 WS: [ \n\t\r]+ -> skip;

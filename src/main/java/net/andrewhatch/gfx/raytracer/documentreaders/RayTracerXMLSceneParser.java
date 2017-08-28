@@ -143,7 +143,7 @@ public class RayTracerXMLSceneParser extends DefaultHandler implements GenericSc
         }
       } else if (current_name.equals(POSITION)) {
         if (old_name.equals(VIEWPOINT)) {
-          camera.setViewpoint(getVector(atts));
+          camera.setPosition(getVector(atts));
           animation.startEyePosition = getVector(atts);
         } else if (old_name.equals(LOOKAT)) {
           camera.setLookAt(getVector(atts));

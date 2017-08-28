@@ -9,14 +9,8 @@ public class Lighting {
 
   List<Light> lights;
 
-
   public Lighting() {
-    lights = new ArrayList<Light>();
-  }
-
-  public static Light getDefaultLight(Point lightpoint) {
-    Point center = new Point(lightpoint);
-    return new Light(center);
+    lights = new ArrayList();
   }
 
   public void addLight(Light light) {
@@ -29,12 +23,12 @@ public class Lighting {
     double total_brightness = 0.0;
     Light l;
     for (int i = 0; i < num_lights; i++) {
-      l = (Light) lights.get(i);
+      l = lights.get(i);
       total_brightness += l.getBrightness();
     }
 
     for (int i = 0; i < num_lights; i++) {
-      l = (Light) lights.get(i);
+      l = lights.get(i);
       l.setRelativeBrightness(l.getBrightness() / total_brightness);
     }
   }
@@ -42,14 +36,9 @@ public class Lighting {
   public void addLightsToScene(Scene s) {
     Light l;
     for (int i = 0; i < lights.size(); i++) {
-      l = (Light) lights.get(i);
+      l = lights.get(i);
       s.addSceneObject(l);
     }
-  }
-
-  public Light getFirstLight() {
-    return (Light) lights.get(0);
-
   }
 
   public Iterator<Light> getIterator() {

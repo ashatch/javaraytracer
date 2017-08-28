@@ -39,6 +39,26 @@ public class OpticalProperties {
     this.luminous = lumin;
   }
 
+  public void setRefractiveness(double refractiveness) {
+    this.refractiveness = refractiveness;
+  }
+
+  public void setTransparency(double transparency) {
+    this.transparency = transparency;
+  }
+
+  public void setReflectiveness(double reflectiveness) {
+    this.reflectiveness = reflectiveness;
+  }
+
+  public void setDiffusion(double diffusion) {
+    this.diffusion = diffusion;
+  }
+
+  public void setLuminous(boolean luminous) {
+    this.luminous = luminous;
+  }
+
   public String toString() {
     return "optics[" + colour + "refr:" + refractiveness + ",transp:" + transparency + ",refl:" + reflectiveness + ",dif:" + diffusion + " lumin:" + luminous + "]";
   }
