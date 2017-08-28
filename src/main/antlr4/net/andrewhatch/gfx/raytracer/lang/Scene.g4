@@ -12,6 +12,7 @@ definition
     : cameraDefinition
     | lightDefinition
     | sphereDefinition
+    | planeDefinition
     | opticsDefinition
     ;
 
@@ -25,6 +26,10 @@ cameraDefinition
 
 sphereDefinition
     : Sphere LeftBrace statementList RightBrace
+    ;
+
+planeDefinition
+    : Plane LeftBrace statementList RightBrace
     ;
 
 opticsDefinition
@@ -129,6 +134,7 @@ RightBrace: '}';
 Camera: '†';
 Light: '☼';
 Sphere: '◯';
+Plane: '▭';
 Vector: '→';
 Diameter: 'Ø';
 Brightness: 'Γ';

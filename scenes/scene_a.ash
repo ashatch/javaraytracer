@@ -43,6 +43,15 @@ optics:clearsphere {
     luminous no;
 }
 
+optics:greyfloor {
+    colour 0.4 0.4 0.4;
+    refraction 0.0;
+    transparency 0.0;
+    reflection 0.6;
+    diffusion 0.4;
+    luminous no;
+}
+
 † {
     → 500.0 1500.0 0.0;
     ambience 0.1 0.1 0.1;
@@ -82,3 +91,7 @@ optics:clearsphere {
     Ø 180.0;
 }
 
+▭ {
+    λ greyfloor;
+    → 0.0 -80.0 0.0;
+}

@@ -11,6 +11,7 @@ import net.andrewhatch.gfx.raytracer.scene.Lighting;
 import net.andrewhatch.gfx.raytracer.scene.OpticalProperties;
 import net.andrewhatch.gfx.raytracer.scene.Scene;
 import net.andrewhatch.gfx.raytracer.scene.Vector;
+import net.andrewhatch.gfx.raytracer.scene.geometry.Plane;
 import net.andrewhatch.gfx.raytracer.scene.geometry.Sphere;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -170,6 +171,12 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
     final Sphere sphere = new Sphere(this.currentVector.toPoint(), this.currentRadius, this.assignedOptics);
     log.info("Sphere: radius={} op={}", sphere.getRadius(), sphere.getOpticProperties());
     this.scene.addSceneObject(sphere);
+  }
+
+  @Override public void exitPlaneDefinition(@NotNull SceneParser.PlaneDefinitionContext ctx) {
+    final Plane plane = new Plane(
+        this.currentVector.toPoint(), new Vector(0f, 1f, 0f), this.assignedOptics);
+    this.scene.addSceneObject(plane);
   }
 
   @Override public void exitLightDefinition(@NotNull SceneParser.LightDefinitionContext ctx) {
