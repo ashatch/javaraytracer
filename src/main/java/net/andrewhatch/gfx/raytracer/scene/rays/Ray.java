@@ -69,15 +69,18 @@ public class Ray {
       return;
     }
 
-    if (closest_hit.object.getOpticProperties().luminous) {
-      // It's the light source
+    if (isALightSource()) {
       c.set(closest_hit.object.getOpticProperties().colour);
       return;
     }
 
     // Ask the object for its shader
-    Shader shader = closest_hit.object.createShader(this);
-    shader.getColour(c);
+    final Shader shader = closest_hit.object.createShader(this);
+    shader.writeColour(c);
+  }
+
+  private boolean isALightSource() {
+    return closest_hit.object.getOpticProperties().luminous;
   }
 
 }

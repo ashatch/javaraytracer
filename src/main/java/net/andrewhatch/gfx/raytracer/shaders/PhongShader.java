@@ -19,14 +19,15 @@ import java.util.List;
 public class PhongShader extends Shader {
 
   // Secondary rays
-  Ray reflected_ray;
-  RefractedRay refracted_ray;
+  private Ray reflected_ray;
+  private RefractedRay refracted_ray;
 
   // geometry
-  Point intersect;
-  Vector normal;
-  List<ShadowRay> shadow_rays = new ArrayList<ShadowRay>();
-  double cosine;
+  private Vector normal;
+  private List<ShadowRay> shadow_rays = new ArrayList<ShadowRay>();
+  private double cosine;
+
+  protected Point intersect;
 
   public PhongShader(Scene scene, Ray incident_ray, RayHitInfo hit, SceneObject obj) {
     super(scene, incident_ray, obj);
@@ -53,21 +54,25 @@ public class PhongShader extends Shader {
       }
     }
 
+    applyReflection(scene);
+    applyRefraction(scene);
 
-    // Reflection
+  }
+
+  private void applyReflection(Scene scene) {
     if (optical_properties.reflectiveness > 0.0) {
       Vector ref = reflect();
       reflected_ray = new Ray(scene, intersect, ref, depth + 1);
     }
+  }
 
-    // Refraction
+  private void applyRefraction(Scene scene) {
     if (optical_properties.transparency > 0.0) {
       Vector ref = refract();
       if (ref.nonzero()) {
         refracted_ray = new RefractedRay(scene, intersect, ref, depth + 1, optical_properties.refractiveness);
       }
     }
-
   }
 
   public Vector reflect() {
@@ -111,20 +116,20 @@ public class PhongShader extends Shader {
     }
   }
 
-  public void getColour(Colour c) {
+  public void writeColour(Colour c) {
     // Diffused light
-    Colour diffuse = new Colour();
-    Iterator<ShadowRay> i = shadow_rays.iterator();
+    final Colour diffuse = new Colour();
+    final Iterator<ShadowRay> i = shadow_rays.iterator();
     ShadowRay ray;
     while (i.hasNext()) {
       ray = i.next();
-      Colour raydiff = new Colour();
-      ray.fire(raydiff);
+      final Colour rayDiffuseColour = new Colour();
+      ray.fire(rayDiffuseColour);
 
-      raydiff.attenuate(ray.attenuation);
-      raydiff.attenuate(ray.cosine);
-      raydiff.attenuate(ray.light_brightness);
-      diffuse.combineWith(raydiff);
+      rayDiffuseColour.attenuate(ray.attenuation);
+      rayDiffuseColour.attenuate(ray.cosine);
+      rayDiffuseColour.attenuate(ray.light_brightness);
+      diffuse.combineWith(rayDiffuseColour);
     }
 
     diffuse.attenuate(optical_properties.diffusion);

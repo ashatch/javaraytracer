@@ -20,7 +20,7 @@ public abstract class Shader {
     this.depth = incident_ray.getDepth();
   }
 
-  public abstract void getColour(Colour c);
+  public abstract void writeColour(Colour c);
 
   public int getDepth() {
     return depth;

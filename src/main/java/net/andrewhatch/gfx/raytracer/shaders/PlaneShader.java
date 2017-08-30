@@ -15,8 +15,8 @@ public class PlaneShader extends PhongShader {
     this.pixel = obj.getPixel(intersect);
   }
 
-  public void getColour(Colour c) {
-    super.getColour(c);
+  public void writeColour(Colour c) {
+    super.writeColour(c);
     c.attenuate(pixel);
   }
 

@@ -21,7 +21,7 @@ lightDefinition
     ;
 
 cameraDefinition
-    : Camera LeftBrace statementList RightBrace
+    : Camera LeftBrace cameraStatementList RightBrace
     ;
 
 sphereDefinition
@@ -44,12 +44,20 @@ opticsStatementList
     : (opticsStatement LineEnd)+
     ;
 
+cameraStatementList
+    : (cameraStatement LineEnd)+
+    ;
+
+cameraStatement
+    : positionDeclaration
+    | ambienceDeclaration
+    | vectorDeclaration
+    ;
+
 statement
     : vectorDeclaration
     | diameterDeclaration
     | brightnessDeclaration
-    | ambienceDeclaration
-    | positionDeclaration
     | lightAssignment
     ;
 
