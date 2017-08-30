@@ -1,4 +1,4 @@
-package net.andrewhatch.gfx.raytracer.scene.geometry;
+package net.andrewhatch.gfx.raytracer.scene.core;
 
 public class Roots {
   public int num;

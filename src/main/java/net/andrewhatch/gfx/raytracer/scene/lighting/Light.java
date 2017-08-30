@@ -1,7 +1,5 @@
 package net.andrewhatch.gfx.raytracer.scene.lighting;
 
-import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
-import net.andrewhatch.gfx.raytracer.scene.optics.OpticalProperties;
 import net.andrewhatch.gfx.raytracer.scene.core.Point;
 import net.andrewhatch.gfx.raytracer.scene.geometry.Sphere;
 
@@ -9,7 +7,6 @@ public class Light extends Sphere {
 
   private double brightness = 1.0;
   private double relative_brightness = 1.0;
-  private OpticalProperties optics;
 
   public Light() {
     super();
@@ -17,17 +14,7 @@ public class Light extends Sphere {
 
   public Light(Point center) {
     super();
-    /*
-		Colour c = new Colour (1.1, 1.1, 0.9);
-	    double refr = 0;
-		double transp = 0;
-		double refl = 0.5;
-		double diffusion = 0.5;
-		double radius = 80;
-		*/
-    //optics = new OpticalProperties(c, refr, transp, refl, diffusion, true);
-
-    set(center, radius, optics);
+    set(center, radius, optic_properties);
   }
 
   public double getBrightness() {
@@ -44,13 +31,5 @@ public class Light extends Sphere {
 
   public void setRelativeBrightness(double b) {
     this.relative_brightness = b;
-  }
-
-  public Colour getColour() {
-    return optics.colour;
-  }
-
-  public String toString() {
-    return super.toString();
   }
 }
