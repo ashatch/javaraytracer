@@ -53,7 +53,7 @@ optics:greyfloor {
 }
 
 † {
-    size 2000 1000;
+    size 600 400;
     → 500.0 1500.0 0.0;
     ambience 0.1 0.1 0.1;
     viewpoint 0.0 100.0 -600.000;
