@@ -68,7 +68,7 @@ public class RayTracerXMLSceneParser extends DefaultHandler implements GenericSc
   }
 
   public void parse(String xmlstring) {
-    this.scene = new Scene();
+    this.scene = new Scene(new Lighting());
     try {
       reader.parse(new InputSource(new StringReader(xmlstring)));
     } catch (final SAXException | IOException e) {
@@ -172,8 +172,8 @@ public class RayTracerXMLSceneParser extends DefaultHandler implements GenericSc
     } else if (qName.equals(OBJECTS)) {
       this.object_list = false;
     } else if (qName.equals(SCENE)) {
-      scene.setLighting(lighting);
-      lighting.addLightsToScene(scene);
+//      scene.setLighting(lighting);
+//      lighting.addLightsToScene(scene);
     }
   }
 

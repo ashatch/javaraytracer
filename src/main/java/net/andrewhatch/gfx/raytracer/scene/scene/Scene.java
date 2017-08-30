@@ -11,31 +11,27 @@ import java.util.List;
 
 public class Scene {
 
-  private Light light;
+  private final Lighting lighting;
+  private final List<SceneObject> objs = new ArrayList();
 
   private int max_depth = 4;
   private boolean superSampling = false;
-
-  private List<SceneObject> objs = new ArrayList<SceneObject>();
-  private Lighting lights;
   private Colour ambient_colour;
 
-  public Scene() {
+  public Scene(final Lighting lighting) {
+    this.lighting = lighting;
   }
 
   public void addSceneObject(SceneObject obj) {
+    if (obj instanceof Light) {
+      this.lighting.addLight((Light)obj);
+    }
     obj.setScene(this);
     objs.add(obj);
   }
 
   public List<SceneObject> getSceneObjects() {
     return objs;
-  }
-
-  public void setLight(Point lightpoint) {
-    Point center = new Point(lightpoint);
-    light = new Light(center);
-    addSceneObject(light);
   }
 
   public int getMaxDepth() {
@@ -55,16 +51,11 @@ public class Scene {
   }
 
   public String toString() {
-    return "scene[" + light + " " + max_depth + ", " + ambient_colour + "," + objs + ", " + lights + "]";
+    return "scene[" + max_depth + ", " + ambient_colour + "," + objs + ", " + lighting + "]";
   }
 
   public Lighting getLighting() {
-    return lights;
-  }
-
-  public void setLighting(Lighting lighting) {
-    this.lights = lighting;
-
+    return lighting;
   }
 
   public boolean isSuperSampling() {

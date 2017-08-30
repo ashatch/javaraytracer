@@ -73,8 +73,7 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
 
   @Override public void enterScene(@NotNull SceneParser.SceneContext ctx) {
     log.info("enter scene");
-    this.scene = new Scene();
-    this.scene.setLighting(new Lighting());
+    this.scene = new Scene(new Lighting());
     this.scene.setMaxDepth(16);
     this.scene.setSuperSampling(true);
   }
@@ -85,11 +84,6 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
         Double.parseDouble(ctx.floatList().Float(1).getText()),
         Double.parseDouble(ctx.floatList().Float(2).getText())
     ));
-  }
-
-  @Override public void exitScene(@NotNull SceneParser.SceneContext ctx) {
-    log.info("exit scene");
-    this.scene.getLighting().addLightsToScene(scene);
   }
 
   @Override public void enterDefinition(@NotNull SceneParser.DefinitionContext ctx) {
@@ -184,7 +178,7 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
     light.setBrightness(this.currentBrightness);
     light.setOpticProperties(this.assignedOptics);
     log.info("Light radius {} brightness {} op={}", light.getRadius(), light.getBrightness(), light.getOpticProperties());
-    this.scene.getLighting().addLight(light);
+    this.scene.addSceneObject(light);
   }
 
   @Override public void exitLightAssignment(@NotNull SceneParser.LightAssignmentContext ctx) {
