@@ -72,6 +72,10 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
     ));
   }
 
+  @Override public void exitCameraDefinition(@NotNull SceneParser.CameraDefinitionContext ctx) {
+    this.camera.setPosition(this.currentVector);
+  }
+
   @Override public void exitCameraSizeDefinition(@NotNull SceneParser.CameraSizeDefinitionContext ctx) {
     this.camera = new Camera(new Dimension(
         Integer.parseInt(ctx.Integer(0).getText()),
@@ -92,15 +96,12 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
     ));
   }
 
-  @Override public void exitCameraParameterDeclaration(@NotNull final SceneParser.CameraParameterDeclarationContext ctx) {
-    if ("viewpoint".equals(ctx.cameraParameterKey().getText())) {
-      this.viewpoint = position(ctx);
-      log.info("viewpoint: {}", this.viewpoint);
-      getCamera().setPosition(this.viewpoint);
-    } else if ("lookAt".equals(ctx.cameraParameterKey().getText())) {
-      getCamera().setLookAt(position(ctx));
-      log.info("lookAt: {}",  getCamera().getLookAt());
-    }
+  @Override public void exitCameraLookAtDeclaration(@NotNull SceneParser.CameraLookAtDeclarationContext ctx) {
+    getCamera().setLookAt(new Vector(
+        Float.parseFloat(ctx.Float(0).getText()),
+        Float.parseFloat(ctx.Float(1).getText()),
+        Float.parseFloat(ctx.Float(2).getText())
+    ));
   }
 
   @Override public void exitDiameterDeclaration(@NotNull SceneParser.DiameterDeclarationContext ctx) {
@@ -175,12 +176,5 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
 
   @Override public void exitBrightnessDeclaration(@NotNull SceneParser.BrightnessDeclarationContext ctx) {
     this.currentBrightness = Float.parseFloat(ctx.Float().getText());
-  }
-
-  private Vector position(@NotNull final SceneParser.CameraParameterDeclarationContext ctx) {
-    double x = Double.valueOf(ctx.floatList().Float(0).getText());
-    double y = Double.valueOf(ctx.floatList().Float(1).getText());
-    double z = Double.valueOf(ctx.floatList().Float(2).getText());
-    return new Vector(x, y, z);
   }
 }
