@@ -34,7 +34,6 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
   private Vector viewpoint;
   private Vector currentVector;
   private double currentRadius;
-  //private OpticalProperties optics;
   private final Map<String, OpticalProperties> optics = new HashMap<>();
   private OpticalProperties currentOptics;
   private OpticalProperties assignedOptics;
@@ -65,9 +64,6 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
 
   @Override
   public Camera getCamera() {
-    if (this.camera == null) {
-      this.camera = new Camera(new Dimension(800,600));
-    }
     return this.camera;
   }
 
@@ -83,6 +79,13 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
         Double.parseDouble(ctx.floatList().Float(0).getText()),
         Double.parseDouble(ctx.floatList().Float(1).getText()),
         Double.parseDouble(ctx.floatList().Float(2).getText())
+    ));
+  }
+
+  @Override public void exitCameraSizeDefinition(@NotNull SceneParser.CameraSizeDefinitionContext ctx) {
+    this.camera = new Camera(new Dimension(
+        Integer.parseInt(ctx.Integer(0).getText()),
+        Integer.parseInt(ctx.Integer(1).getText())
     ));
   }
 

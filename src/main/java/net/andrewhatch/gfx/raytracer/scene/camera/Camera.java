@@ -54,6 +54,10 @@ public class Camera implements Positionable {
     updateVectors();
   }
 
+  public Dimension getViewportSize() {
+    return new Dimension((int)viewportXSize, (int)viewportYSsize);
+  }
+
   @Override
   public void setPosition(final Vector eyePosition) {
     this.eyePosition = eyePosition;

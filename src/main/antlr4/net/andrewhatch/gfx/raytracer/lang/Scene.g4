@@ -49,7 +49,8 @@ cameraStatementList
     ;
 
 cameraStatement
-    : cameraParameterDeclaration
+    : cameraSizeDefinition
+    | cameraParameterDeclaration
     | ambienceDeclaration
     | vectorDeclaration
     ;
@@ -87,6 +88,10 @@ cameraParameterKey
     | 'lookAt'
     ;
 
+cameraSizeDefinition
+    : 'size' Integer Integer
+    ;
+
 ambienceDeclaration
     : 'ambience' floatList
     ;
@@ -119,6 +124,10 @@ floatList
 
 Float
     : '-'? '0'..'9'+'.''0'..'9'+
+    ;
+
+Integer
+    : '0'..'9'+
     ;
 
 

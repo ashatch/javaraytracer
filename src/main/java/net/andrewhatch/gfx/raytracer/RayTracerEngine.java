@@ -31,15 +31,13 @@ public class RayTracerEngine implements ImageProducer, Runnable {
   private boolean finished = true;
   private double percent_complete = 0.0;
 
-  public RayTracerEngine(final Dimension image_size) {
-    this(image_size, null, null);
-  }
-
-  public RayTracerEngine(final Dimension image_size, final Scene scene, final Camera camera) {
+  public RayTracerEngine(final Scene scene, final Camera camera) {
     this.scene = scene;
     this.camera = camera;
-    this.width = image_size.width;
-    this.height = image_size.height;
+    this.width = this.camera.getViewportSize().width;
+    this.height = this.camera.getViewportSize().height;
+//    this.width = image_size.width;
+//    this.height = image_size.height;
     forward = new Vector(0, 0, 1);  //away in left handed univ.
     forward.normalise();
   }

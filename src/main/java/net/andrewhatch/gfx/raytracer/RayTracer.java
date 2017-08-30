@@ -51,18 +51,16 @@ public class RayTracer implements RayTracerListener {
     animation = parser.getCameraAnimation();
     Vector cam_pos = animation.getCameraPositionForFrame(frame);
 
-    Dimension image_size = new Dimension(900, 500);
-
     Camera c = parser.getCamera();
-    c.setViewportSize(image_size);
+//    c.setViewportSize(image_size);
     c.setPosition(cam_pos);
 
-    tracer = new RayTracerEngine(image_size, parsed_scene, c);
+    tracer = new RayTracerEngine(parsed_scene, c);
     tracer.setSuperSampling(parsed_scene.isSuperSampling());
     tracer.setRayTracerListener(this);
 
     display = new RayTracerDisplay(tracer);
-    display.setPreferredSize(image_size);
+    display.setPreferredSize(c.getViewportSize());
 
     display.addMessage("Supersampling: " + parsed_scene.isSuperSampling());
     display.addMessage("Scene: " + doc);
