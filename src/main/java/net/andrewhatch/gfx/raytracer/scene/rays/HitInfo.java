@@ -1,7 +1,6 @@
-package net.andrewhatch.gfx.raytracer.scene.geometry;
+package net.andrewhatch.gfx.raytracer.scene.rays;
 
-import net.andrewhatch.gfx.raytracer.scene.Ray;
-import net.andrewhatch.gfx.raytracer.scene.Vector;
+import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 
 public class HitInfo {
   Object ignore;   // One object to ignore (used by Cast).

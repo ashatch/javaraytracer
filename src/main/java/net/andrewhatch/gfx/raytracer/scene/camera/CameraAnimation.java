@@ -1,5 +1,7 @@
-package net.andrewhatch.gfx.raytracer.scene;
+package net.andrewhatch.gfx.raytracer.scene.camera;
 
+
+import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 
 public class CameraAnimation {
 

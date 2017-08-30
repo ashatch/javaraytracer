@@ -1,4 +1,6 @@
-package net.andrewhatch.gfx.raytracer.scene;
+package net.andrewhatch.gfx.raytracer.scene.lighting;
+
+import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 
 import java.util.ArrayList;
 import java.util.Iterator;

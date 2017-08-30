@@ -1,5 +1,9 @@
-package net.andrewhatch.gfx.raytracer.scene;
+package net.andrewhatch.gfx.raytracer.scene.rays;
 
+
+import net.andrewhatch.gfx.raytracer.scene.core.Point;
+import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
+import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 
 public class RefractedRay extends Ray {
 

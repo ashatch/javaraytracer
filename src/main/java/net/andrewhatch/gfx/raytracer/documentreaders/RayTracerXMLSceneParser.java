@@ -1,15 +1,15 @@
 package net.andrewhatch.gfx.raytracer.documentreaders;
 
-import net.andrewhatch.gfx.raytracer.scene.Camera;
-import net.andrewhatch.gfx.raytracer.scene.CameraAnimation;
-import net.andrewhatch.gfx.raytracer.scene.Colour;
-import net.andrewhatch.gfx.raytracer.scene.Light;
-import net.andrewhatch.gfx.raytracer.scene.Lighting;
-import net.andrewhatch.gfx.raytracer.scene.OpticalProperties;
-import net.andrewhatch.gfx.raytracer.scene.Point;
-import net.andrewhatch.gfx.raytracer.scene.Scene;
-import net.andrewhatch.gfx.raytracer.scene.SceneObject;
-import net.andrewhatch.gfx.raytracer.scene.Vector;
+import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
+import net.andrewhatch.gfx.raytracer.scene.camera.CameraAnimation;
+import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
+import net.andrewhatch.gfx.raytracer.scene.lighting.Light;
+import net.andrewhatch.gfx.raytracer.scene.lighting.Lighting;
+import net.andrewhatch.gfx.raytracer.scene.optics.OpticalProperties;
+import net.andrewhatch.gfx.raytracer.scene.core.Point;
+import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
+import net.andrewhatch.gfx.raytracer.scene.scene.SceneObject;
+import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 import net.andrewhatch.gfx.raytracer.scene.geometry.Plane;
 import net.andrewhatch.gfx.raytracer.scene.geometry.Sphere;
 

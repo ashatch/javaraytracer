@@ -1,4 +1,9 @@
-package net.andrewhatch.gfx.raytracer.scene;
+package net.andrewhatch.gfx.raytracer.scene.camera;
+
+import net.andrewhatch.gfx.raytracer.scene.core.Positionable;
+import net.andrewhatch.gfx.raytracer.scene.core.Vector;
+import net.andrewhatch.gfx.raytracer.scene.rays.Ray;
+import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 
 import java.awt.Dimension;
 

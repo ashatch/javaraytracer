@@ -1,10 +1,10 @@
 package net.andrewhatch.gfx.raytracer.shaders;
 
-import net.andrewhatch.gfx.raytracer.scene.Colour;
-import net.andrewhatch.gfx.raytracer.scene.OpticalProperties;
-import net.andrewhatch.gfx.raytracer.scene.Ray;
-import net.andrewhatch.gfx.raytracer.scene.Scene;
-import net.andrewhatch.gfx.raytracer.scene.SceneObject;
+import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
+import net.andrewhatch.gfx.raytracer.scene.optics.OpticalProperties;
+import net.andrewhatch.gfx.raytracer.scene.rays.Ray;
+import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
+import net.andrewhatch.gfx.raytracer.scene.scene.SceneObject;
 
 public abstract class Shader {
 

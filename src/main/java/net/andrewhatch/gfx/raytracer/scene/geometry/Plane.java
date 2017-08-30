@@ -1,12 +1,12 @@
 package net.andrewhatch.gfx.raytracer.scene.geometry;
 
-import net.andrewhatch.gfx.raytracer.scene.Colour;
-import net.andrewhatch.gfx.raytracer.scene.OpticalProperties;
-import net.andrewhatch.gfx.raytracer.scene.Point;
-import net.andrewhatch.gfx.raytracer.scene.Ray;
-import net.andrewhatch.gfx.raytracer.scene.RayHitInfo;
-import net.andrewhatch.gfx.raytracer.scene.SceneObject;
-import net.andrewhatch.gfx.raytracer.scene.Vector;
+import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
+import net.andrewhatch.gfx.raytracer.scene.optics.OpticalProperties;
+import net.andrewhatch.gfx.raytracer.scene.core.Point;
+import net.andrewhatch.gfx.raytracer.scene.rays.Ray;
+import net.andrewhatch.gfx.raytracer.scene.rays.RayHitInfo;
+import net.andrewhatch.gfx.raytracer.scene.scene.SceneObject;
+import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 import net.andrewhatch.gfx.raytracer.shaders.PlaneShader;
 import net.andrewhatch.gfx.raytracer.shaders.Shader;
 
@@ -15,7 +15,6 @@ public class Plane extends SceneObject {
   private Point center;
   private Vector normal;
 
-  private double cos_inv;
   private RayHitInfo hit;
 
   public Plane() {
@@ -45,7 +44,6 @@ public class Plane extends SceneObject {
   private void update() {
     if (this.normal != null) {
       this.normal.normalise();
-      this.cos_inv = 1.0 / this.normal.dotproduct(new Vector(0, 0, 1));
     }
   }
 

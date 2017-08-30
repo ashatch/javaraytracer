@@ -1,5 +1,8 @@
-package net.andrewhatch.gfx.raytracer.scene;
+package net.andrewhatch.gfx.raytracer.scene.lighting;
 
+import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
+import net.andrewhatch.gfx.raytracer.scene.optics.OpticalProperties;
+import net.andrewhatch.gfx.raytracer.scene.core.Point;
 import net.andrewhatch.gfx.raytracer.scene.geometry.Sphere;
 
 public class Light extends Sphere {

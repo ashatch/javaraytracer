@@ -1,9 +1,9 @@
-package net.andrewhatch.gfx.raytracer.scene;
+package net.andrewhatch.gfx.raytracer.scene.core;
 
 public class Point {
-  public double x;
-  public double y;
-  public double z;
+  private double x;
+  private double y;
+  private double z;
 
   public Point(double x, double y, double z) {
     this.x = x;
@@ -21,6 +21,18 @@ public class Point {
     this.x += p.x;
     this.y += p.y;
     this.z += p.z;
+  }
+
+  public double getX() {
+    return x;
+  }
+
+  public double getY() {
+    return y;
+  }
+
+  public double getZ() {
+    return z;
   }
 
   public String toString() {

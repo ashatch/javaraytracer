@@ -1,4 +1,4 @@
-package net.andrewhatch.gfx.raytracer.scene;
+package net.andrewhatch.gfx.raytracer.scene.core;
 
 
 public class Vector {
@@ -22,7 +22,7 @@ public class Vector {
   }
 
   public Vector(Point p, Point origin) {
-    set(p.x - origin.x, p.y - origin.y, p.z - origin.z);
+    set(p.getX() - origin.getX(), p.getY() - origin.getY(), p.getZ() - origin.getZ());
   }
 
   public void set(double x, double y, double z) {

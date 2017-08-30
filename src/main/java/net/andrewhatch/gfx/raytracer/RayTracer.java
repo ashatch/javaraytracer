@@ -7,10 +7,10 @@ import com.google.inject.Guice;
 import net.andrewhatch.gfx.raytracer.documentreaders.AshSceneParser;
 import net.andrewhatch.gfx.raytracer.documentreaders.GenericSceneParser;
 import net.andrewhatch.gfx.raytracer.documentreaders.RayTracerXMLSceneParser;
-import net.andrewhatch.gfx.raytracer.scene.Camera;
-import net.andrewhatch.gfx.raytracer.scene.CameraAnimation;
-import net.andrewhatch.gfx.raytracer.scene.Scene;
-import net.andrewhatch.gfx.raytracer.scene.Vector;
+import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
+import net.andrewhatch.gfx.raytracer.scene.camera.CameraAnimation;
+import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
+import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

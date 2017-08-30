@@ -1,11 +1,11 @@
 package net.andrewhatch.gfx.raytracer;
 
 import net.andrewhatch.gfx.lib.Pixels;
-import net.andrewhatch.gfx.raytracer.scene.Camera;
-import net.andrewhatch.gfx.raytracer.scene.Colour;
-import net.andrewhatch.gfx.raytracer.scene.Ray;
-import net.andrewhatch.gfx.raytracer.scene.Scene;
-import net.andrewhatch.gfx.raytracer.scene.Vector;
+import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
+import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
+import net.andrewhatch.gfx.raytracer.scene.rays.Ray;
+import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
+import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 
 import java.awt.Dimension;
 import java.awt.image.ColorModel;

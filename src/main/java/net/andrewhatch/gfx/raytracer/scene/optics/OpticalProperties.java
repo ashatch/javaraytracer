@@ -1,4 +1,4 @@
-package net.andrewhatch.gfx.raytracer.scene;
+package net.andrewhatch.gfx.raytracer.scene.optics;
 
 
 public class OpticalProperties {

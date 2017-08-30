@@ -1,9 +1,9 @@
 package net.andrewhatch.gfx.raytracer.scene.geometry;
 
-import net.andrewhatch.gfx.raytracer.scene.Colour;
-import net.andrewhatch.gfx.raytracer.scene.OpticalProperties;
-import net.andrewhatch.gfx.raytracer.scene.Point;
-import net.andrewhatch.gfx.raytracer.scene.Vector;
+import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
+import net.andrewhatch.gfx.raytracer.scene.optics.OpticalProperties;
+import net.andrewhatch.gfx.raytracer.scene.core.Point;
+import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 
 public class TexturedPlane extends Plane {
 
@@ -22,8 +22,8 @@ public class TexturedPlane extends Plane {
   }
 
   public Colour getPixel(Point p) {
-    int x = (int) Math.ceil(p.x * cos_inv);
-    int y = (int) Math.ceil(p.y);
+    int x = (int) Math.ceil(p.getX() * cos_inv);
+    int y = (int) Math.ceil(p.getY());
     x %= width;
     y %= height;
 

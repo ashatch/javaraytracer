@@ -1,15 +1,15 @@
 package net.andrewhatch.gfx.raytracer.shaders;
 
-import net.andrewhatch.gfx.raytracer.scene.Colour;
-import net.andrewhatch.gfx.raytracer.scene.Light;
-import net.andrewhatch.gfx.raytracer.scene.Point;
-import net.andrewhatch.gfx.raytracer.scene.Ray;
-import net.andrewhatch.gfx.raytracer.scene.RayHitInfo;
-import net.andrewhatch.gfx.raytracer.scene.RefractedRay;
-import net.andrewhatch.gfx.raytracer.scene.Scene;
-import net.andrewhatch.gfx.raytracer.scene.SceneObject;
-import net.andrewhatch.gfx.raytracer.scene.ShadowRay;
-import net.andrewhatch.gfx.raytracer.scene.Vector;
+import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
+import net.andrewhatch.gfx.raytracer.scene.lighting.Light;
+import net.andrewhatch.gfx.raytracer.scene.core.Point;
+import net.andrewhatch.gfx.raytracer.scene.rays.Ray;
+import net.andrewhatch.gfx.raytracer.scene.rays.RayHitInfo;
+import net.andrewhatch.gfx.raytracer.scene.rays.RefractedRay;
+import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
+import net.andrewhatch.gfx.raytracer.scene.scene.SceneObject;
+import net.andrewhatch.gfx.raytracer.scene.rays.ShadowRay;
+import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 
 import java.util.ArrayList;
 import java.util.Iterator;
