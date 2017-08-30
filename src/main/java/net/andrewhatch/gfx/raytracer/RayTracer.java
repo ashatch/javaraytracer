@@ -6,13 +6,11 @@ import com.google.inject.Guice;
 
 import net.andrewhatch.gfx.raytracer.documentreaders.AshSceneParser;
 import net.andrewhatch.gfx.raytracer.documentreaders.GenericSceneParser;
-import net.andrewhatch.gfx.raytracer.documentreaders.RayTracerXMLSceneParser;
 import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
 import net.andrewhatch.gfx.raytracer.scene.camera.CameraAnimation;
-import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 import net.andrewhatch.gfx.raytracer.scene.core.Vector;
+import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +50,6 @@ public class RayTracer implements RayTracerListener {
     Vector cam_pos = animation.getCameraPositionForFrame(frame);
 
     Camera c = parser.getCamera();
-//    c.setViewportSize(image_size);
     c.setPosition(cam_pos);
 
     tracer = new RayTracerEngine(parsed_scene, c);
@@ -74,9 +71,7 @@ public class RayTracer implements RayTracerListener {
   }
 
   private GenericSceneParser getParser(String doc) {
-    return doc.endsWith(".xml") ?
-        new RayTracerXMLSceneParser() :
-        new AshSceneParser();
+    return new AshSceneParser();
   }
 
   public void setupForFrame() {
