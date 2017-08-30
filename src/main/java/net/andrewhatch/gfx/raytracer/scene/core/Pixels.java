@@ -1,4 +1,4 @@
-package net.andrewhatch.gfx.lib;
+package net.andrewhatch.gfx.raytracer.scene.core;
 
 import java.awt.Dimension;
 

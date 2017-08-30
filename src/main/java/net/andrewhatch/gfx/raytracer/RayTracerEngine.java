@@ -1,6 +1,6 @@
 package net.andrewhatch.gfx.raytracer;
 
-import net.andrewhatch.gfx.lib.Pixels;
+import net.andrewhatch.gfx.raytracer.scene.core.Pixels;
 import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
 import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
 import net.andrewhatch.gfx.raytracer.scene.rays.Ray;
