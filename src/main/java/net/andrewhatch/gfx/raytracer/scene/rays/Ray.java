@@ -17,8 +17,6 @@ public class Ray {
   protected Scene scene;
   protected Vector direction;
   protected int depth;
-  //protected SceneObject intersected_object;
-  //protected double distance = FAR_AWAY;
   protected RayHitInfo closest_hit = new RayHitInfo();
 
   public Ray(Scene scene, Point origin, Vector direction, int depth) {

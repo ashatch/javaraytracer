@@ -35,6 +35,7 @@ public class AshSceneParser extends SceneBaseListener implements SceneParser {
   private OpticalProperties currentOptics;
   private OpticalProperties assignedOptics;
   private float currentBrightness;
+  private int maxDepth = 1;
 
   @Override
   public void parse(String document) {
@@ -59,7 +60,10 @@ public class AshSceneParser extends SceneBaseListener implements SceneParser {
   @Override public void enterScene(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.SceneContext ctx) {
     log.info("enter scene");
     this.scene = new Scene(new Lighting());
-    this.scene.setMaxDepth(16);
+  }
+
+  @Override public void exitScene(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.SceneContext ctx) {
+    this.scene.setMaxDepth(this.maxDepth);
     this.scene.setSuperSampling(true);
   }
 
@@ -80,6 +84,10 @@ public class AshSceneParser extends SceneBaseListener implements SceneParser {
         Integer.parseInt(ctx.Integer(0).getText()),
         Integer.parseInt(ctx.Integer(1).getText())
     ));
+  }
+
+  @Override public void exitMaxDepthDefinition(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.MaxDepthDefinitionContext ctx) {
+    this.maxDepth = Integer.parseInt(ctx.Integer().getText());
   }
 
   @Override public void enterDefinition(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.DefinitionContext ctx) {

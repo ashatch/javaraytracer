@@ -53,6 +53,7 @@ cameraStatement
     | cameraLookAtDeclaration
     | ambienceDeclaration
     | vectorDeclaration
+    | maxDepthDefinition
     ;
 
 statement
@@ -88,6 +89,10 @@ cameraSizeDefinition
 
 ambienceDeclaration
     : 'ambience' floatList
+    ;
+
+maxDepthDefinition
+    : 'maxDepth' Integer
     ;
 
 opticsStatement
