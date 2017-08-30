@@ -4,7 +4,6 @@ import net.andrewhatch.gfx.raytracer.lang.SceneBaseListener;
 import net.andrewhatch.gfx.raytracer.lang.SceneLexer;
 import net.andrewhatch.gfx.raytracer.lang.SceneParser;
 import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
-import net.andrewhatch.gfx.raytracer.scene.camera.CameraAnimation;
 import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
 import net.andrewhatch.gfx.raytracer.scene.lighting.Light;
 import net.andrewhatch.gfx.raytracer.scene.lighting.Lighting;
@@ -29,7 +28,6 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
   private static final Logger log = LoggerFactory.getLogger(AshSceneParser.class);
 
   private Scene scene;
-  private CameraAnimation cameraAnimation;
   private Camera camera;
   private Vector viewpoint;
   private Vector currentVector;
@@ -52,14 +50,6 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
   @Override
   public Scene getScene() {
     return scene;
-  }
-
-  @Override
-  public CameraAnimation getCameraAnimation() {
-    if (this.cameraAnimation == null) {
-      this.cameraAnimation = new CameraAnimation();
-    }
-    return this.cameraAnimation;
   }
 
   @Override
@@ -107,11 +97,6 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
       this.viewpoint = position(ctx);
       log.info("viewpoint: {}", this.viewpoint);
       getCamera().setPosition(this.viewpoint);
-      getCameraAnimation().startEyePosition = this.viewpoint;
-      getCameraAnimation().frames = 50;
-    } else if ("to".equals(ctx.cameraParameterKey().getText())) {
-      getCameraAnimation().endEyePosition = position(ctx);
-      log.info("to: {}",  getCameraAnimation().endEyePosition);
     } else if ("lookAt".equals(ctx.cameraParameterKey().getText())) {
       getCamera().setLookAt(position(ctx));
       log.info("lookAt: {}",  getCamera().getLookAt());

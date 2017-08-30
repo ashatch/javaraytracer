@@ -7,7 +7,6 @@ import com.google.inject.Guice;
 import net.andrewhatch.gfx.raytracer.documentreaders.AshSceneParser;
 import net.andrewhatch.gfx.raytracer.documentreaders.GenericSceneParser;
 import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
-import net.andrewhatch.gfx.raytracer.scene.camera.CameraAnimation;
 import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 
@@ -26,12 +25,10 @@ public class RayTracer implements RayTracerListener {
   GenericSceneParser parser;
   RayTracerDisplay display;
   RayTracerEngine tracer;
-  CameraAnimation animation;
 
   int frame = 1;
 
   private boolean save = false;
-  private boolean animate = false;
 
   public static void main(String[] args) throws IOException {
     Guice.createInjector(new AbstractModule() {
@@ -46,11 +43,7 @@ public class RayTracer implements RayTracerListener {
     parser.parse(new String(Files.readAllBytes(Paths.get(doc)), Charsets.UTF_8));
     Scene parsed_scene = parser.getScene();
 
-    animation = parser.getCameraAnimation();
-    Vector cam_pos = animation.getCameraPositionForFrame(frame);
-
     Camera c = parser.getCamera();
-    c.setPosition(cam_pos);
 
     tracer = new RayTracerEngine(parsed_scene, c);
     tracer.setSuperSampling(parsed_scene.isSuperSampling());
@@ -74,16 +67,6 @@ public class RayTracer implements RayTracerListener {
     return new AshSceneParser();
   }
 
-  public void setupForFrame() {
-    Vector cam_pos = animation.getCameraPositionForFrame(frame);
-    Camera c = parser.getCamera();
-    c.setPosition(cam_pos);
-    tracer.setCamera(c);
-    display.reset();
-    display.repaint();
-  }
-
-
   public void traceStarted() {
     System.out.println("Ray Tracing started");
   }
@@ -101,12 +84,6 @@ public class RayTracer implements RayTracerListener {
         e.printStackTrace();
       }
       System.out.println("done.");
-    }
-
-    if (animate && frame < animation.frames) {
-      frame++;
-      setupForFrame();
-      tracer.start();
     }
   }
 

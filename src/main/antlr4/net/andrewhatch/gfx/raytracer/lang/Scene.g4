@@ -84,7 +84,6 @@ lightAssignment
 
 cameraParameterKey
     : 'viewpoint'
-    | 'to'
     | 'lookAt'
     ;
 
