@@ -5,9 +5,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 
 import net.andrewhatch.gfx.raytracer.documentreaders.AshSceneParser;
-import net.andrewhatch.gfx.raytracer.documentreaders.GenericSceneParser;
+import net.andrewhatch.gfx.raytracer.documentreaders.SceneParser;
 import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
-import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 
 import java.awt.image.BufferedImage;
@@ -22,7 +21,7 @@ import javax.swing.*;
 
 public class RayTracer implements RayTracerListener {
 
-  GenericSceneParser parser;
+  SceneParser parser;
   RayTracerDisplay display;
   RayTracerEngine tracer;
 
@@ -63,7 +62,7 @@ public class RayTracer implements RayTracerListener {
     tracer.start();
   }
 
-  private GenericSceneParser getParser(String doc) {
+  private SceneParser getParser(String doc) {
     return new AshSceneParser();
   }
 

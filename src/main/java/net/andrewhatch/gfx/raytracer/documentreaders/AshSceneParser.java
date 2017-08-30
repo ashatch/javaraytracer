@@ -2,7 +2,6 @@ package net.andrewhatch.gfx.raytracer.documentreaders;
 
 import net.andrewhatch.gfx.raytracer.lang.SceneBaseListener;
 import net.andrewhatch.gfx.raytracer.lang.SceneLexer;
-import net.andrewhatch.gfx.raytracer.lang.SceneParser;
 import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
 import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
 import net.andrewhatch.gfx.raytracer.scene.lighting.Light;
@@ -24,7 +23,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AshSceneParser extends SceneBaseListener implements GenericSceneParser {
+public class AshSceneParser extends SceneBaseListener implements SceneParser {
   private static final Logger log = LoggerFactory.getLogger(AshSceneParser.class);
 
   private Scene scene;
@@ -41,8 +40,8 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
   public void parse(String document) {
     final SceneLexer lexer = new SceneLexer(new ANTLRInputStream(document));
     final CommonTokenStream tokens = new CommonTokenStream(lexer);
-    final SceneParser parser = new SceneParser(tokens);
-    final SceneParser.SceneContext sceneContext = parser.scene();
+    final net.andrewhatch.gfx.raytracer.lang.SceneParser parser = new net.andrewhatch.gfx.raytracer.lang.SceneParser(tokens);
+    final net.andrewhatch.gfx.raytracer.lang.SceneParser.SceneContext sceneContext = parser.scene();
 
     ParseTreeWalker.DEFAULT.walk(this, sceneContext);
   }
@@ -57,14 +56,14 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
     return this.camera;
   }
 
-  @Override public void enterScene(@NotNull SceneParser.SceneContext ctx) {
+  @Override public void enterScene(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.SceneContext ctx) {
     log.info("enter scene");
     this.scene = new Scene(new Lighting());
     this.scene.setMaxDepth(16);
     this.scene.setSuperSampling(true);
   }
 
-  @Override public void exitAmbienceDeclaration(@NotNull SceneParser.AmbienceDeclarationContext ctx) {
+  @Override public void exitAmbienceDeclaration(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.AmbienceDeclarationContext ctx) {
     this.scene.setAmbientColour(new Colour(
         Double.parseDouble(ctx.floatList().Float(0).getText()),
         Double.parseDouble(ctx.floatList().Float(1).getText()),
@@ -72,23 +71,23 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
     ));
   }
 
-  @Override public void exitCameraDefinition(@NotNull SceneParser.CameraDefinitionContext ctx) {
+  @Override public void exitCameraDefinition(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.CameraDefinitionContext ctx) {
     this.camera.setPosition(this.currentVector);
   }
 
-  @Override public void exitCameraSizeDefinition(@NotNull SceneParser.CameraSizeDefinitionContext ctx) {
+  @Override public void exitCameraSizeDefinition(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.CameraSizeDefinitionContext ctx) {
     this.camera = new Camera(new Dimension(
         Integer.parseInt(ctx.Integer(0).getText()),
         Integer.parseInt(ctx.Integer(1).getText())
     ));
   }
 
-  @Override public void enterDefinition(@NotNull SceneParser.DefinitionContext ctx) {
+  @Override public void enterDefinition(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.DefinitionContext ctx) {
     this.currentRadius = 0.0;
     this.currentVector = new Vector();
   }
 
-  @Override public void exitColourDeclaration(@NotNull final SceneParser.ColourDeclarationContext ctx) {
+  @Override public void exitColourDeclaration(@NotNull final net.andrewhatch.gfx.raytracer.lang.SceneParser.ColourDeclarationContext ctx) {
     this.currentOptics.setColour(new Colour(
         Double.parseDouble(ctx.Float(0).getText()),
         Double.parseDouble(ctx.Float(1).getText()),
@@ -96,7 +95,7 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
     ));
   }
 
-  @Override public void exitCameraLookAtDeclaration(@NotNull SceneParser.CameraLookAtDeclarationContext ctx) {
+  @Override public void exitCameraLookAtDeclaration(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.CameraLookAtDeclarationContext ctx) {
     getCamera().setLookAt(new Vector(
         Float.parseFloat(ctx.Float(0).getText()),
         Float.parseFloat(ctx.Float(1).getText()),
@@ -104,64 +103,64 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
     ));
   }
 
-  @Override public void exitDiameterDeclaration(@NotNull SceneParser.DiameterDeclarationContext ctx) {
+  @Override public void exitDiameterDeclaration(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.DiameterDeclarationContext ctx) {
     this.currentRadius = Double.parseDouble(ctx.Float().getText())/2.0;
   }
 
-  @Override public void exitVectorDeclaration(@NotNull SceneParser.VectorDeclarationContext ctx) {
+  @Override public void exitVectorDeclaration(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.VectorDeclarationContext ctx) {
     final float x = Float.parseFloat(ctx.Float(0).getText());
     final float y = Float.parseFloat(ctx.Float(1).getText());
     final float z = Float.parseFloat(ctx.Float(2).getText());
     this.currentVector = new Vector(x, y, z);
   }
 
-  @Override public void enterOpticsDefinition(@NotNull SceneParser.OpticsDefinitionContext ctx) {
+  @Override public void enterOpticsDefinition(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.OpticsDefinitionContext ctx) {
     this.currentOptics = new OpticalProperties();
   }
 
-  @Override public void exitOpticsDefinition(@NotNull SceneParser.OpticsDefinitionContext ctx) {
+  @Override public void exitOpticsDefinition(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.OpticsDefinitionContext ctx) {
     this.optics.put(ctx.Identifier().getText(), this.currentOptics);
     log.info("Optics now: {}", this.optics);
   }
 
-  @Override public void exitReflectionDeclaration(@NotNull SceneParser.ReflectionDeclarationContext ctx) {
+  @Override public void exitReflectionDeclaration(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.ReflectionDeclarationContext ctx) {
     final float reflection = Float.parseFloat(ctx.Float().getText());
     this.currentOptics.setReflectiveness(reflection);
   }
 
-  @Override public void exitRefractionDeclaration(@NotNull SceneParser.RefractionDeclarationContext ctx) {
+  @Override public void exitRefractionDeclaration(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.RefractionDeclarationContext ctx) {
     final float refraction = Float.parseFloat(ctx.Float().getText());
     this.currentOptics.setRefractiveness(refraction);
   }
 
-  @Override public void exitTransparencyDeclaration(@NotNull SceneParser.TransparencyDeclarationContext ctx) {
+  @Override public void exitTransparencyDeclaration(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.TransparencyDeclarationContext ctx) {
     final float transparency = Float.parseFloat(ctx.Float().getText());
     this.currentOptics.setTransparency(transparency);
   }
 
-  @Override public void exitDiffusionDeclaration(@NotNull SceneParser.DiffusionDeclarationContext ctx) {
+  @Override public void exitDiffusionDeclaration(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.DiffusionDeclarationContext ctx) {
     final float diffusion = Float.parseFloat(ctx.Float().getText());
     this.currentOptics.setDiffusion(diffusion);
   }
 
-  @Override public void exitLuminousDeclaration(@NotNull SceneParser.LuminousDeclarationContext ctx) {
+  @Override public void exitLuminousDeclaration(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.LuminousDeclarationContext ctx) {
     final boolean luminous = "yes".equals(ctx.BooleanValue().getText());
     this.currentOptics.setLuminous(luminous);
   }
 
-  @Override public void exitSphereDefinition(@NotNull SceneParser.SphereDefinitionContext ctx) {
+  @Override public void exitSphereDefinition(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.SphereDefinitionContext ctx) {
     final Sphere sphere = new Sphere(this.currentVector.toPoint(), this.currentRadius, this.assignedOptics);
     log.info("Sphere: radius={} op={}", sphere.getRadius(), sphere.getOpticProperties());
     this.scene.addSceneObject(sphere);
   }
 
-  @Override public void exitPlaneDefinition(@NotNull SceneParser.PlaneDefinitionContext ctx) {
+  @Override public void exitPlaneDefinition(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.PlaneDefinitionContext ctx) {
     final Plane plane = new Plane(
         this.currentVector.toPoint(), new Vector(0f, 1f, 0f), this.assignedOptics);
     this.scene.addSceneObject(plane);
   }
 
-  @Override public void exitLightDefinition(@NotNull SceneParser.LightDefinitionContext ctx) {
+  @Override public void exitLightDefinition(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.LightDefinitionContext ctx) {
     final Light light = new Light(this.currentVector.toPoint());
     light.setRadius(this.currentRadius);
     light.setBrightness(this.currentBrightness);
@@ -170,11 +169,11 @@ public class AshSceneParser extends SceneBaseListener implements GenericScenePar
     this.scene.addSceneObject(light);
   }
 
-  @Override public void exitLightAssignment(@NotNull SceneParser.LightAssignmentContext ctx) {
+  @Override public void exitLightAssignment(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.LightAssignmentContext ctx) {
     this.assignedOptics = this.optics.get(ctx.Identifier().getText());
   }
 
-  @Override public void exitBrightnessDeclaration(@NotNull SceneParser.BrightnessDeclarationContext ctx) {
+  @Override public void exitBrightnessDeclaration(@NotNull net.andrewhatch.gfx.raytracer.lang.SceneParser.BrightnessDeclarationContext ctx) {
     this.currentBrightness = Float.parseFloat(ctx.Float().getText());
   }
 }

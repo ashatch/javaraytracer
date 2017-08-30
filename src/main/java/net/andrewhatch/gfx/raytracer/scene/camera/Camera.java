@@ -21,7 +21,7 @@ public class Camera implements Positionable {
   private double fov;
 
   private double viewportXSize;
-  private double viewportYSsize;
+  private double viewportYSize;
 
   private Vector dir;
   private Vector upWithScale;
@@ -42,20 +42,14 @@ public class Camera implements Positionable {
 
     fov = 40;
     viewportXSize = viewportSize.getWidth();
-    viewportYSsize = viewportSize.getHeight();
+    viewportYSize = viewportSize.getHeight();
 
     updateVectors();
 
-  }
-
-  public void setViewportSize(final Dimension size) {
-    viewportXSize = size.getWidth();
-    viewportYSsize = size.getHeight();
-    updateVectors();
   }
 
   public Dimension getViewportSize() {
-    return new Dimension((int)viewportXSize, (int)viewportYSsize);
+    return new Dimension((int)viewportXSize, (int) viewportYSize);
   }
 
   @Override
@@ -74,16 +68,12 @@ public class Camera implements Positionable {
     updateVectors();
   }
 
-  public Vector getLookAt() {
-    return lookAtTarget;
-  }
-
   public void updateVectors() {
     up.normalise();
     left.normalise();
     front.normalise();
 
-    double fovFactor = viewportXSize / viewportYSsize;
+    double fovFactor = viewportXSize / viewportYSize;
 
     dir = front.multiplyNew(0.5);
     upWithScale = up.multiplyNew(Math.tan(Math.toRadians(fov / 2)));
@@ -94,7 +84,7 @@ public class Camera implements Positionable {
                                final double xpos,
                                final double ypos) {
     final double u = (xpos - viewportXSize / 2.0) / viewportXSize;
-    final double v = ((viewportYSsize - ypos - 1) - viewportYSsize / 2.0) / viewportYSsize;
+    final double v = ((viewportYSize - ypos - 1) - viewportYSize / 2.0) / viewportYSize;
 
     final Vector dv = upWithScale.multiplyNew(v);
     final Vector du = rightWithScale.multiplyNew(u);
