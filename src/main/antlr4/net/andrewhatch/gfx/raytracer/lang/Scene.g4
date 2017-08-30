@@ -49,7 +49,7 @@ cameraStatementList
     ;
 
 cameraStatement
-    : positionDeclaration
+    : cameraParameterDeclaration
     | ambienceDeclaration
     | vectorDeclaration
     ;
@@ -73,15 +73,15 @@ brightnessDeclaration
     : Brightness Float
     ;
 
-positionDeclaration
-    : positionKey floatList
+cameraParameterDeclaration
+    : cameraParameterKey floatList
     ;
 
 lightAssignment
     : Lambda Identifier
     ;
 
-positionKey
+cameraParameterKey
     : 'viewpoint'
     | 'to'
     | 'lookAt'
