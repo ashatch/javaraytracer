@@ -12,44 +12,46 @@ import net.andrewhatch.gfx.raytracer.events.RayTracedLine;
 import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
 import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.swing.*;
+import javax.swing.JFrame;
 
 
 public class RayTracer {
+  private static final Logger logger = LoggerFactory.getLogger(RayTracer.class);
 
   private final String sourceFile;
+  private final boolean saveImage;
+
   SceneParser parser;
   RayTracerDisplay display;
   RayTracerEngine tracer;
 
   int frame = 1;
 
-  private boolean save = false;
   private EventBus rayTracingEventBus;
-
-  public static void main(String[] args) throws IOException {
-    Guice.createInjector(
-        new CliModule(args),
-        new RayTracerModule())
-          .getInstance(RayTracer.class)
-          .rayTraceFilePath();
-  }
 
   @Inject
   public RayTracer(final SceneParser parser,
                    final EventBus eventBus,
-                   final @Named("sourceFile") String sourceFile) {
+                   final @Named("sourceFile") Optional<String> sourceFile,
+                   final @Named("saveImage") boolean saveImage) {
+    this.sourceFile = sourceFile.orElseThrow(() ->
+        new IllegalArgumentException("Must supply a source file"));
+
     this.parser = parser;
-    this.sourceFile = sourceFile;
+    this.saveImage = saveImage;
     this.rayTracingEventBus = eventBus;
     this.rayTracingEventBus.register(this);
   }
@@ -79,26 +81,27 @@ public class RayTracer {
 
   @Subscribe
   public void traceStarted(final RayTraceStarted evt) {
-    System.out.println("Ray Tracing started");
+    logger.info("Ray Tracing started at {}", evt.getNanoTime());
   }
 
   @Subscribe
   public void traceFinished(final RayTraceFinished evt) {
-    System.out.println("Ray Tracing finished");
+    logger.info("Ray Tracing finished at {}", evt.getNanoTime());
 
-    if (save) {
-      System.out.print("Writing frame " + frame + " ... ");
-      System.out.flush();
-      BufferedImage img = display.getTracedImage();
+    if (saveImage) {
+      logger.info("Writing frame " + frame + " ... ");
+      final BufferedImage img = display.getTracedImage();
       try {
         ImageIO.write(img, "PNG", new File("trace_" + frame + ".png"));
       } catch (IOException e) {
-        e.printStackTrace();
+        logger.error("Problem writing image", e);
       }
-      System.out.println("done.");
+      logger.info("Done.");
     }
   }
 
   @Subscribe
-  public void tracedLine(final RayTracedLine evet) {}
+  public void tracedLine(final RayTracedLine event) {
+    logger.trace("Traced line {}", event.getLineNumber());
+  }
 }

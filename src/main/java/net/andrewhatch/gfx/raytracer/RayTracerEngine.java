@@ -98,7 +98,7 @@ public class RayTracerEngine implements ImageProducer, Runnable {
 
   @Override
   public void run() {
-    rayTracingEventBus.post(new RayTraceStarted());
+    rayTracingEventBus.post(new RayTraceStarted(System.nanoTime()));
 
     for (int y = 0; y < height; y++) {
       if (superSampling) {
@@ -139,7 +139,7 @@ public class RayTracerEngine implements ImageProducer, Runnable {
       }
     }
 
-    rayTracingEventBus.post(new RayTraceFinished());
+    rayTracingEventBus.post(new RayTraceFinished(System.nanoTime()));
 
     finished = true;
   }
