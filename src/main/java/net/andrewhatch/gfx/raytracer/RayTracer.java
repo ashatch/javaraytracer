@@ -31,7 +31,7 @@ import javax.swing.JFrame;
 public class RayTracer {
   private static final Logger logger = LoggerFactory.getLogger(RayTracer.class);
 
-  private final String sourceFile;
+  private final Optional<String> sourceFile;
   private final boolean saveImage;
 
   SceneParser parser;
@@ -47,8 +47,7 @@ public class RayTracer {
                    final EventBus eventBus,
                    final @Named("sourceFile") Optional<String> sourceFile,
                    final @Named("saveImage") boolean saveImage) {
-    this.sourceFile = sourceFile.orElseThrow(() ->
-        new IllegalArgumentException("Must supply a source file"));
+    this.sourceFile = sourceFile;
 
     this.parser = parser;
     this.saveImage = saveImage;
@@ -57,16 +56,19 @@ public class RayTracer {
   }
 
   public void rayTraceFilePath() throws IOException {
-    parser.parse(new String(Files.readAllBytes(Paths.get(sourceFile)), Charsets.UTF_8));
-    Scene parsed_scene = parser.getScene();
+    final String filePath = sourceFile.orElseThrow(() ->
+        new IllegalArgumentException("Must supply a source file"));
 
-    Camera c = parser.getCamera();
+    parser.parse(new String(Files.readAllBytes(Paths.get(filePath)), Charsets.UTF_8));
 
-    tracer = new RayTracerEngine(rayTracingEventBus, parsed_scene, c);
+    final Scene parsed_scene = parser.getScene();
+    final Camera camera = parser.getCamera();
+
+    tracer = new RayTracerEngine(rayTracingEventBus, parsed_scene, camera);
     tracer.setSuperSampling(parsed_scene.isSuperSampling());
 
     display = new RayTracerDisplay(tracer);
-    display.setPreferredSize(c.getViewportSize());
+    display.setPreferredSize(camera.getViewportSize());
 
     display.addMessage("Supersampling: " + parsed_scene.isSuperSampling());
     display.addMessage("Scene: " + sourceFile);
