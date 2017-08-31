@@ -25,26 +25,29 @@ public class Vector {
     set(p.getX() - origin.getX(), p.getY() - origin.getY(), p.getZ() - origin.getZ());
   }
 
-  public void set(double x, double y, double z) {
+  public Vector set(double x, double y, double z) {
     this.x = x;
     this.y = y;
     this.z = z;
+    return this;
   }
 
   public double length() {
     return Math.sqrt((x * x) + (y * y) + (z * z));
   }
 
-  public void add(Vector v) {
+  public Vector add(Vector v) {
     this.x += v.x;
     this.y += v.y;
     this.z += v.z;
+    return this;
   }
 
-  public void scale(double a) {
+  public Vector scale(double a) {
     this.x *= a;
     this.y *= a;
     this.z *= a;
+    return this;
   }
 
   public Vector multiplyNew(double a) {
@@ -59,29 +62,32 @@ public class Vector {
     return new Vector(x - v.x, y - v.y, z - v.z);
   }
 
-  public void subtract(Vector v) {
+  public Vector subtract(Vector v) {
     this.x -= v.x;
     this.y -= v.y;
     this.z -= v.z;
+    return this;
   }
 
-  public void unaryMinus() {
+  public Vector unaryMinus() {
     this.x = -this.x;
     this.y = -this.y;
     this.z = -this.z;
+    return this;
   }
 
   public double dotproduct(Vector v) {
     return (v.x * x) + (v.y * y) + (v.z * z);
   }
 
-  public void crossProduct(Vector v) {
+  public Vector crossProduct(Vector v) {
     double xh = y * v.z - v.y * z;
     double yh = z * v.x - v.z * x;
     double zh = x * v.y - v.x * y;
     x = xh;
     y = yh;
     z = zh;
+    return this;
   }
 
   public Vector crossProductNew(Vector v) {
@@ -91,13 +97,14 @@ public class Vector {
     return new Vector(xh, yh, zh);
   }
 
-  public void normalise() {
+  public Vector normalise() {
     double f = 1.0d / length();
     if (f > EPSILON) {
       scale(f);
     } else {
       set(0.0, 0.0, 0.0);
     }
+    return this;
   }
 
   public boolean nonzero() {

@@ -5,9 +5,7 @@ import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
 import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
 import net.andrewhatch.gfx.raytracer.scene.rays.Ray;
 import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
-import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 
-import java.awt.Dimension;
 import java.awt.image.ColorModel;
 import java.awt.image.ImageConsumer;
 import java.awt.image.ImageProducer;
@@ -18,32 +16,27 @@ public class RayTracerEngine implements ImageProducer, Runnable {
   public Camera camera;
   private int width;
   private int height;
-  //private int[] pixels;
   private Pixels pixels;
   private int lines_produced;
   private int lines_consumed;
-  private Thread t;
+  private Thread thread;
   private ImageConsumer consumer;
   private Scene scene;
-  private Vector forward;
   private RayTracerListener rtl;
-  private boolean supersampling = false;
+  private boolean superSampling = false;
   private boolean finished = true;
   private double percent_complete = 0.0;
 
-  public RayTracerEngine(final Scene scene, final Camera camera) {
+  public RayTracerEngine(final Scene scene,
+                         final Camera camera) {
     this.scene = scene;
     this.camera = camera;
     this.width = this.camera.getViewportSize().width;
     this.height = this.camera.getViewportSize().height;
-//    this.width = image_size.width;
-//    this.height = image_size.height;
-    forward = new Vector(0, 0, 1);  //away in left handed univ.
-    forward.normalise();
   }
 
   public void setSuperSampling(final boolean flag) {
-    this.supersampling = flag;
+    this.superSampling = flag;
   }
 
   public void setRayTracerListener(final RayTracerListener l) {
@@ -55,12 +48,13 @@ public class RayTracerEngine implements ImageProducer, Runnable {
     lines_consumed = 0;
     finished = false;
     percent_complete = 0.0;
-    int pix[] = new int[width * height];
+    final int pix[] = new int[width * height];
     pixels = new Pixels(pix, width, height);
-    t = new Thread(this);
-    t.start();
+    thread = new Thread(this);
+    thread.start();
   }
 
+  @Override
   public void addConsumer(final ImageConsumer ic) {
     consumer = ic;
     consumer.setColorModel(ColorModel.getRGBdefault());
@@ -69,15 +63,18 @@ public class RayTracerEngine implements ImageProducer, Runnable {
     consumer = ic;
   }
 
+  @Override
   public boolean isConsumer(final ImageConsumer ic) {
     return consumer == ic;
 
   }
 
+  @Override
   public void removeConsumer(final ImageConsumer ic) {
     consumer = null;
   }
 
+  @Override
   public void startProduction(final ImageConsumer ic) {
     addConsumer(ic);
     if (lines_produced == height) {
@@ -85,6 +82,7 @@ public class RayTracerEngine implements ImageProducer, Runnable {
     }
   }
 
+  @Override
   public void requestTopDownLeftRightResend(final ImageConsumer ic) {
     ic.setHints(ImageConsumer.TOPDOWNLEFTRIGHT);
     ic.setPixels(0, 0, width, lines_produced, ColorModel.getRGBdefault(), pixels.getPixels(), 0, width);
@@ -94,13 +92,15 @@ public class RayTracerEngine implements ImageProducer, Runnable {
     }
   }
 
+
+  @Override
   public void run() {
     if (rtl != null) {
       rtl.traceStarted();
     }
     for (int y = 0; y < height; y++) {
-      if (supersampling) {
-        traceLineSupersampling(y);
+      if (superSampling) {
+        traceLineSuperSampling(y);
       } else {
         traceLine(y);
       }
@@ -153,26 +153,21 @@ public class RayTracerEngine implements ImageProducer, Runnable {
     return this.percent_complete;
   }
 
-  public Pixels getPixels() {
-    return this.pixels;
-  }
-
-  public void traceLine(int y) {
+  public void traceLine(final int y) {
     for (int x = 0; x < width; x++) {
-      Ray r = camera.generateRay(scene, x, y);
-      Colour shade = new Colour();
+      final Ray r = camera.generateRay(scene, x, y);
+      final Colour shade = new Colour();
       r.fire(shade);
       pixels.getPixels()[(y * width) + x] = shade.getRGB();
 
     }
   }
 
-  public void traceLineSupersampling(int y) {
-    int side = 2;
+  public void traceLineSuperSampling(int y) {
+    final int side = 2;
     for (int x = 0; x < width; x++) {
-      Colour shade = new Colour();
-      Ray[][] r = camera.generateSupersampledRays(scene, x, y, 2, 4.0);
-      Colour[] pixel_c = new Colour[(side * 2 + 1) * (side * 2 + 1)];
+      final Ray[][] r = camera.generateSupersampledRays(scene, x, y, 2, 4.0);
+      final Colour[] pixel_c = new Colour[(side * 2 + 1) * (side * 2 + 1)];
       int index = 0;
       for (int i = 0; i < side * 2 + 1; i++) {
         for (int j = 0; j < side * 2 + 1; j++) {
@@ -182,10 +177,8 @@ public class RayTracerEngine implements ImageProducer, Runnable {
         }
       }
 
-      shade = Colour.getAverageColour(pixel_c);
-
+      final Colour shade = Colour.getAverageColour(pixel_c);
       pixels.getPixels()[(y * width) + x] = shade.getRGB();
-
     }
   }
 
@@ -195,10 +188,6 @@ public class RayTracerEngine implements ImageProducer, Runnable {
 
   public int getWidth() {
     return width;
-  }
-
-  public void setCamera(Camera camera) {
-    this.camera = camera;
   }
 
   public void setScene(Scene s) {
