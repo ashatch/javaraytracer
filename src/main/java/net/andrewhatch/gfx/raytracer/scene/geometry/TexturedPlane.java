@@ -1,9 +1,9 @@
 package net.andrewhatch.gfx.raytracer.scene.geometry;
 
-import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
-import net.andrewhatch.gfx.raytracer.scene.optics.OpticalProperties;
 import net.andrewhatch.gfx.raytracer.scene.core.Point;
 import net.andrewhatch.gfx.raytracer.scene.core.Vector;
+import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
+import net.andrewhatch.gfx.raytracer.scene.optics.OpticalProperties;
 
 public class TexturedPlane extends Plane {
 

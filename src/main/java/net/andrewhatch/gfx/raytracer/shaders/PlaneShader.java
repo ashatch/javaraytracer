@@ -1,10 +1,10 @@
 package net.andrewhatch.gfx.raytracer.shaders;
 
+import net.andrewhatch.gfx.raytracer.scene.geometry.Plane;
 import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
 import net.andrewhatch.gfx.raytracer.scene.rays.Ray;
 import net.andrewhatch.gfx.raytracer.scene.rays.RayHitInfo;
 import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
-import net.andrewhatch.gfx.raytracer.scene.geometry.Plane;
 
 public class PlaneShader extends PhongShader {
 

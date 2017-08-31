@@ -1,9 +1,8 @@
 package net.andrewhatch.gfx.raytracer.scene.scene;
 
-import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
-import net.andrewhatch.gfx.raytracer.scene.core.Point;
 import net.andrewhatch.gfx.raytracer.scene.lighting.Light;
 import net.andrewhatch.gfx.raytracer.scene.lighting.Lighting;
+import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
 
 import java.util.ArrayList;
 import java.util.List;

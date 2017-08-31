@@ -1,10 +1,10 @@
 package net.andrewhatch.gfx.raytracer.scene.rays;
 
-import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
 import net.andrewhatch.gfx.raytracer.scene.core.Point;
+import net.andrewhatch.gfx.raytracer.scene.core.Vector;
+import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
 import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 import net.andrewhatch.gfx.raytracer.scene.scene.SceneObject;
-import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 import net.andrewhatch.gfx.raytracer.shaders.Shader;
 
 import java.util.Iterator;

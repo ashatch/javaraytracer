@@ -3,11 +3,8 @@ package net.andrewhatch.gfx.raytracer;
 import com.google.common.base.Charsets;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
-import com.google.inject.Provides;
 
-import net.andrewhatch.gfx.raytracer.documentreaders.AshSceneParser;
 import net.andrewhatch.gfx.raytracer.documentreaders.SceneParser;
 import net.andrewhatch.gfx.raytracer.events.RayTraceFinished;
 import net.andrewhatch.gfx.raytracer.events.RayTraceStarted;
@@ -23,11 +20,13 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.swing.*;
 
 
 public class RayTracer {
 
+  private final String sourceFile;
   SceneParser parser;
   RayTracerDisplay display;
   RayTracerEngine tracer;
@@ -38,20 +37,25 @@ public class RayTracer {
   private EventBus rayTracingEventBus;
 
   public static void main(String[] args) throws IOException {
-    Guice.createInjector(new RayTracerModule() {})
-        .getInstance(RayTracer.class).rayTraceFilePath(args[0]);
+    Guice.createInjector(
+        new CliModule(args),
+        new RayTracerModule())
+          .getInstance(RayTracer.class)
+          .rayTraceFilePath();
   }
 
   @Inject
   public RayTracer(final SceneParser parser,
-                   final EventBus eventBus) {
+                   final EventBus eventBus,
+                   final @Named("sourceFile") String sourceFile) {
     this.parser = parser;
+    this.sourceFile = sourceFile;
     this.rayTracingEventBus = eventBus;
     this.rayTracingEventBus.register(this);
   }
 
-  public void rayTraceFilePath(String filePathString) throws IOException {
-    parser.parse(new String(Files.readAllBytes(Paths.get(filePathString)), Charsets.UTF_8));
+  public void rayTraceFilePath() throws IOException {
+    parser.parse(new String(Files.readAllBytes(Paths.get(sourceFile)), Charsets.UTF_8));
     Scene parsed_scene = parser.getScene();
 
     Camera c = parser.getCamera();
@@ -63,7 +67,7 @@ public class RayTracer {
     display.setPreferredSize(c.getViewportSize());
 
     display.addMessage("Supersampling: " + parsed_scene.isSuperSampling());
-    display.addMessage("Scene: " + filePathString);
+    display.addMessage("Scene: " + sourceFile);
 
     JFrame f = new JFrame();
     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -96,7 +100,5 @@ public class RayTracer {
   }
 
   @Subscribe
-  public void tracedLine(final RayTracedLine evet) {
-
-  }
+  public void tracedLine(final RayTracedLine evet) {}
 }

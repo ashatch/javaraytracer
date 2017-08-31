@@ -1,6 +1,6 @@
 package net.andrewhatch.gfx.raytracer.scene.core;
 
-import java.awt.Dimension;
+import java.awt.*;
 
 public class Pixels {
 

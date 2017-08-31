@@ -5,7 +5,7 @@ import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 import net.andrewhatch.gfx.raytracer.scene.rays.Ray;
 import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 
-import java.awt.Dimension;
+import java.awt.*;
 
 
 public class Camera implements Positionable {

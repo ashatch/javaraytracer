@@ -1,14 +1,11 @@
 package net.andrewhatch.gfx.raytracer;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.Vector;
-import javax.swing.JPanel;
+
+import javax.swing.*;
 
 public class RayTracerDisplay extends JPanel {
 
