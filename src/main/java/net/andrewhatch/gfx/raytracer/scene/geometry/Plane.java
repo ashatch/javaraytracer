@@ -26,7 +26,7 @@ public class Plane extends SceneObject {
                final OpticalProperties prop) {
     super();
     this.center = center;
-    this.optic_properties = prop;
+    this.opticProperties = prop;
     this.normal = new Vector(perpendicular);
     update();
   }
@@ -49,7 +49,7 @@ public class Plane extends SceneObject {
 
 
   public Colour getPixel(final Point p) {
-    return this.optic_properties.colour;
+    return this.opticProperties.colour;
   }
 
   public Vector getNormal(final Point intersect) {
@@ -62,7 +62,7 @@ public class Plane extends SceneObject {
       return null;
     }
 
-    Vector oc = new Vector(center, ray.origin);
+    Vector oc = new Vector(center, ray.getOrigin());
 
     double t = oc.dotproduct(normal);
     t /= inc;

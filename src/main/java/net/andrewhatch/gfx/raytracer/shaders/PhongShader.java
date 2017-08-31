@@ -19,12 +19,12 @@ import java.util.List;
 public class PhongShader extends Shader {
 
   // Secondary rays
-  private Ray reflected_ray;
-  private RefractedRay refracted_ray;
+  private Ray reflectedRay;
+  private RefractedRay refractedRay;
 
   // geometry
   private Vector normal;
-  private List<ShadowRay> shadow_rays = new ArrayList<ShadowRay>();
+  private List<ShadowRay> shadowRays = new ArrayList<ShadowRay>();
   private double cosine;
 
   protected Point intersect;
@@ -46,11 +46,11 @@ public class PhongShader extends Shader {
       double light_cos = light_v.dotproduct(normal);
 
       // Shadow ray towards the source of light
-      if (optical_properties.diffusion > 0.0 && light_cos > 0.0) {
+      if (opticalProperties.diffusion > 0.0 && light_cos > 0.0) {
         ShadowRay shadow_ray = new ShadowRay(scene, intersect, light_v, depth + 1);
         shadow_ray.cosine = light_cos;
         shadow_ray.light_brightness = light.getRelativeBrightness();
-        shadow_rays.add(shadow_ray);
+        shadowRays.add(shadow_ray);
       }
     }
 
@@ -60,17 +60,17 @@ public class PhongShader extends Shader {
   }
 
   private void applyReflection(Scene scene) {
-    if (optical_properties.reflectiveness > 0.0) {
+    if (opticalProperties.reflectiveness > 0.0) {
       Vector ref = reflect();
-      reflected_ray = new Ray(scene, intersect, ref, depth + 1);
+      reflectedRay = new Ray(scene, intersect, ref, depth + 1);
     }
   }
 
   private void applyRefraction(Scene scene) {
-    if (optical_properties.transparency > 0.0) {
+    if (opticalProperties.transparency > 0.0) {
       Vector ref = refract();
       if (ref.nonzero()) {
-        refracted_ray = new RefractedRay(scene, intersect, ref, depth + 1, optical_properties.refractiveness);
+        refractedRay = new RefractedRay(scene, intersect, ref, depth + 1, opticalProperties.refractiveness);
       }
     }
   }
@@ -78,16 +78,16 @@ public class PhongShader extends Shader {
   public Vector reflect() {
     Vector result = new Vector(normal);
     result.scale(-2 * cosine);
-    result.add(incident_ray.getDirection());
+    result.add(incidentRay.getDirection());
     return result;
   }
 
   public Vector refract() {
     double refr = 0;
     if (cosine >= 0.0) {
-      refr = optical_properties.refractiveness;
-    } else if (optical_properties.refractiveness > 0.0) {
-      refr = 1.0 / optical_properties.refractiveness;
+      refr = opticalProperties.refractiveness;
+    } else if (opticalProperties.refractiveness > 0.0) {
+      refr = 1.0 / opticalProperties.refractiveness;
     }
 
     double disc_2 = refr * refr * (cosine * cosine - 1) + 1;
@@ -103,7 +103,7 @@ public class PhongShader extends Shader {
       }
 
       // r = a n + b inc
-      Vector result = new Vector(incident_ray.getDirection());
+      Vector result = new Vector(incidentRay.getDirection());
       result.scale(refr);
 
       Vector n = new Vector(normal);
@@ -116,41 +116,41 @@ public class PhongShader extends Shader {
     }
   }
 
-  public void writeColour(Colour c) {
-    // Diffused light
-    final Colour diffuse = new Colour();
-    final Iterator<ShadowRay> i = shadow_rays.iterator();
-    ShadowRay ray;
-    while (i.hasNext()) {
-      ray = i.next();
-      final Colour rayDiffuseColour = new Colour();
-      ray.fire(rayDiffuseColour);
+  public void writeColour(final Colour c) {
+    final Colour diffuseLight = new Colour();
 
-      rayDiffuseColour.attenuate(ray.attenuation);
-      rayDiffuseColour.attenuate(ray.cosine);
-      rayDiffuseColour.attenuate(ray.light_brightness);
-      diffuse.combineWith(rayDiffuseColour);
-    }
+    shadowRays.stream()
+        .forEach(shadowRay -> {
+          final Colour rayDiffuseColour = new Colour();
+          shadowRay.fire(rayDiffuseColour);
 
-    diffuse.attenuate(optical_properties.diffusion);
-    diffuse.combineWith(scene.getAmbientColour());
-    diffuse.attenuate(optical_properties.colour);
-    c.set(diffuse);
+          rayDiffuseColour.attenuate(shadowRay.getAttenuation())
+              .attenuate(shadowRay.cosine)
+              .attenuate(shadowRay.light_brightness);
+
+          diffuseLight.combineWith(rayDiffuseColour);
+        });
+
+    diffuseLight.attenuate(opticalProperties.diffusion)
+        .combineWith(scene.getAmbientColour())
+        .attenuate(opticalProperties.colour);
+
+    c.set(diffuseLight);
 
     // Reflected light
-    if (reflected_ray != null) {
-      Colour specular = new Colour();
-      reflected_ray.fire(specular);
-      specular.attenuate(optical_properties.reflectiveness);
+    if (reflectedRay != null) {
+      final Colour specular = new Colour();
+      reflectedRay.fire(specular);
+      specular.attenuate(opticalProperties.reflectiveness);
       c.combineWith(specular);
     }
 
     // Refracted light
-    if (refracted_ray != null) {
-      Colour refr = new Colour();
-      refracted_ray.fire(refr);
-      refr.attenuate(optical_properties.transparency);
-      c.combineWith(refr);
+    if (refractedRay != null) {
+      Colour refractedColour = new Colour();
+      refractedRay.fire(refractedColour);
+      refractedColour.attenuate(opticalProperties.transparency);
+      c.combineWith(refractedColour);
     }
   }
 

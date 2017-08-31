@@ -33,7 +33,7 @@ public class Sphere extends SceneObject {
   public void set(Point center, double radius, OpticalProperties optics) {
     this.center = center;
     setRadius(radius);
-    this.optic_properties = optics;
+    this.opticProperties = optics;
     this.radiusSquared = radius * radius;
   }
 
@@ -46,7 +46,7 @@ public class Sphere extends SceneObject {
   }
 
   public RayHitInfo intersect(Ray r) {
-    Vector oc = new Vector(center, r.origin);
+    Vector oc = new Vector(center, r.getOrigin());
     double oc2 = oc.dotproduct(oc);
     double dist2 = oc2 - radiusSquared;
 
@@ -102,7 +102,7 @@ public class Sphere extends SceneObject {
   }
 
   public String toString() {
-    return this.getClass().getName() + radius + "@" + center + this.optic_properties;
+    return this.getClass().getName() + radius + "@" + center + this.opticProperties;
   }
 
   @Override

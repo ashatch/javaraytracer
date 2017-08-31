@@ -49,10 +49,11 @@ public class Colour {
     set(c.r, c.g, c.b);
   }
 
-  public final void attenuate(double a) {
+  public final Colour attenuate(double a) {
     r *= a;
     g *= a;
     b *= a;
+    return this;
   }
 
   public final void attenuate(Colour c) {
@@ -61,10 +62,11 @@ public class Colour {
     b *= c.b;
   }
 
-  public final void combineWith(Colour c) {
+  public final Colour combineWith(Colour c) {
     r += c.r;
     g += c.g;
     b += c.b;
+    return this;
   }
 
   public final int getRGB() {

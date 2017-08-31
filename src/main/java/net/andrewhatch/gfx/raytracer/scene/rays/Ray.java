@@ -4,28 +4,27 @@ import net.andrewhatch.gfx.raytracer.scene.core.Point;
 import net.andrewhatch.gfx.raytracer.scene.core.Vector;
 import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
 import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
-import net.andrewhatch.gfx.raytracer.scene.scene.SceneObject;
-import net.andrewhatch.gfx.raytracer.shaders.Shader;
-
-import java.util.Iterator;
 
 
 public class Ray {
 
   protected static final double FAR_AWAY = 1000000.0;
-  public Point origin;
+  protected Point origin;
   protected Scene scene;
   protected Vector direction;
   protected int depth;
-  protected RayHitInfo closest_hit = new RayHitInfo();
+  protected RayHitInfo closestHit = new RayHitInfo();
 
-  public Ray(Scene scene, Point origin, Vector direction, int depth) {
+  public Ray(final Scene scene,
+             final Point origin,
+             final Vector direction,
+             final int depth) {
     this.scene = scene;
     this.origin = origin;
     this.direction = direction;
     this.direction.normalise();
     this.depth = depth;
-    closest_hit.distance = FAR_AWAY;
+    closestHit.distance = FAR_AWAY;
   }
 
   public int getDepth() {
@@ -40,45 +39,43 @@ public class Ray {
     return origin;
   }
 
-  protected void processHit(RayHitInfo hit) {
-    if (hit.distance < closest_hit.distance) {
-      this.closest_hit = hit;
+  protected void processHit(final RayHitInfo hit) {
+    if (hit.distance < closestHit.distance) {
+      this.closestHit = hit;
     }
   }
 
-  public void fire(Colour c) {
-    // Go through all objects and try to intersect with them
-    Iterator<SceneObject> i = scene.getSceneObjects().iterator();
-    SceneObject obj;
-    while (i.hasNext()) {
-      obj = i.next();
-      RayHitInfo hit = obj.intersect(this);
-      if (hit != null) {
-        this.processHit(hit);
-      }
-    }
+  public void fire(final Colour c) {
+    scene.getSceneObjects()
+        .stream()
+        .map(obj -> obj.intersect(this))
+        .filter(hit -> hit != null)
+        .forEach(hit -> this.processHit(hit));
+
     shade(c);
-
   }
 
-  void shade(Colour c) {
-    if (closest_hit == null || closest_hit.object == null || depth > scene.getMaxDepth()) {
+  void shade(final Colour c) {
+    if (didHitAnObject()) {
+      shadeWithSceneObject(c);
+    } else {
       c.set(0, 0, 0);
-      return;
     }
+  }
 
+  private void shadeWithSceneObject(final Colour c) {
     if (isALightSource()) {
-      c.set(closest_hit.object.getOpticProperties().colour);
-      return;
+      c.set(closestHit.object.getOpticProperties().colour);
+    } else {
+      closestHit.object.createShader(this).writeColour(c);
     }
+  }
 
-    // Ask the object for its shader
-    final Shader shader = closest_hit.object.createShader(this);
-    shader.writeColour(c);
+  private boolean didHitAnObject() {
+    return closestHit != null && closestHit.object != null && depth < scene.getMaxDepth();
   }
 
   private boolean isALightSource() {
-    return closest_hit.object.getOpticProperties().luminous;
+    return closestHit.object.getOpticProperties().luminous;
   }
-
 }

@@ -14,7 +14,7 @@ public class Light extends Sphere {
 
   public Light(Point center) {
     super();
-    set(center, radius, optic_properties);
+    set(center, radius, opticProperties);
   }
 
   public double getBrightness() {

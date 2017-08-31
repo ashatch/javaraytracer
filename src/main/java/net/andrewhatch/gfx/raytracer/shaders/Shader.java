@@ -8,16 +8,16 @@ import net.andrewhatch.gfx.raytracer.scene.scene.SceneObject;
 
 public abstract class Shader {
 
-  protected OpticalProperties optical_properties;
+  protected OpticalProperties opticalProperties;
   protected Scene scene;
-  protected Ray incident_ray;
+  protected Ray incidentRay;
   protected int depth;
 
-  public Shader(Scene scene, Ray incident_ray, SceneObject obj) {
+  public Shader(Scene scene, Ray incidentRay, SceneObject obj) {
     this.scene = scene;
-    this.optical_properties = obj.getOpticProperties();
-    this.incident_ray = incident_ray;
-    this.depth = incident_ray.getDepth();
+    this.opticalProperties = obj.getOpticProperties();
+    this.incidentRay = incidentRay;
+    this.depth = incidentRay.getDepth();
   }
 
   public abstract void writeColour(Colour c);
@@ -30,19 +30,19 @@ public abstract class Shader {
     this.depth = depth;
   }
 
-  public Ray getIncident_ray() {
-    return incident_ray;
+  public Ray getIncidentRay() {
+    return incidentRay;
   }
 
-  public void setIncident_ray(Ray incident_ray) {
-    this.incident_ray = incident_ray;
+  public void setIncidentRay(Ray incidentRay) {
+    this.incidentRay = incidentRay;
   }
 
-  public OpticalProperties getOptical_properties() {
-    return optical_properties;
+  public OpticalProperties getOpticalProperties() {
+    return opticalProperties;
   }
 
-  public void setOptical_properties(OpticalProperties optical_properties) {
-    this.optical_properties = optical_properties;
+  public void setOpticalProperties(OpticalProperties opticalProperties) {
+    this.opticalProperties = opticalProperties;
   }
 }

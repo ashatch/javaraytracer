@@ -8,7 +8,7 @@ import net.andrewhatch.gfx.raytracer.shaders.Shader;
 
 public abstract class SceneObject implements Positionable {
 
-  protected OpticalProperties optic_properties;
+  protected OpticalProperties opticProperties;
   protected Scene scene;
 
   public SceneObject() {
@@ -24,11 +24,11 @@ public abstract class SceneObject implements Positionable {
   public abstract Shader createShader(Ray r);
 
   public OpticalProperties getOpticProperties() {
-    return optic_properties;
+    return opticProperties;
   }
 
   public void setOpticProperties(OpticalProperties optic_properties) {
-    this.optic_properties = optic_properties;
+    this.opticProperties = optic_properties;
   }
 
   public abstract String toString();
