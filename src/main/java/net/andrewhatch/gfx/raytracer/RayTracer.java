@@ -38,18 +38,8 @@ public class RayTracer {
   private EventBus rayTracingEventBus;
 
   public static void main(String[] args) throws IOException {
-    Guice.createInjector(new AbstractModule() {
-      @Override
-      protected void configure() {
-        bind(SceneParser.class).to(AshSceneParser.class);
-      }
-
-      @Provides
-      public EventBus eventBus() {
-        return new EventBus();
-      }
-
-    }).getInstance(RayTracer.class).rayTraceFilePath(args[0]);
+    Guice.createInjector(new RayTracerModule() {})
+        .getInstance(RayTracer.class).rayTraceFilePath(args[0]);
   }
 
   @Inject
