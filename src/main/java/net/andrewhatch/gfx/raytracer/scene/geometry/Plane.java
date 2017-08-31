@@ -7,7 +7,7 @@ import net.andrewhatch.gfx.raytracer.scene.optics.OpticalProperties;
 import net.andrewhatch.gfx.raytracer.scene.rays.Ray;
 import net.andrewhatch.gfx.raytracer.scene.rays.RayHitInfo;
 import net.andrewhatch.gfx.raytracer.scene.scene.SceneObject;
-import net.andrewhatch.gfx.raytracer.shaders.PlaneShader;
+import net.andrewhatch.gfx.raytracer.shaders.PhongShader;
 import net.andrewhatch.gfx.raytracer.shaders.Shader;
 
 public class Plane extends SceneObject {
@@ -84,7 +84,7 @@ public class Plane extends SceneObject {
   }
 
   public Shader createShader(Ray ray) {
-    return new PlaneShader(scene, ray, hit, this);
+    return new PhongShader(scene, ray, hit, this);
   }
 
   public String toString() {

@@ -47,7 +47,7 @@ optics:greyfloor {
     colour 0.4 0.4 0.4;
     refraction 0.0;
     transparency 0.0;
-    reflection 0.6;
+    reflection 0.0;
     diffusion 0.4;
     luminous no;
 }
@@ -75,13 +75,13 @@ optics:greyfloor {
 
 ◯ {
     λ greensphere;
-    → 0.0 0.0 100.0;
+    → -100.0 -50.0 100.0;
     Ø 160.0;
 }
 
 ◯ {
     λ clearsphere;
-    → 160.0 -40.0 -40.0;
+    → 120.0 -40.0 -40.0;
     Ø 180.0;
 }
 
