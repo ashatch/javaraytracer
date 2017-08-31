@@ -1,11 +1,16 @@
 package net.andrewhatch.gfx.raytracer;
 
 import com.google.common.base.Charsets;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 
 import net.andrewhatch.gfx.raytracer.documentreaders.AshSceneParser;
 import net.andrewhatch.gfx.raytracer.documentreaders.SceneParser;
+import net.andrewhatch.gfx.raytracer.events.RayTraceFinished;
+import net.andrewhatch.gfx.raytracer.events.RayTraceStarted;
+import net.andrewhatch.gfx.raytracer.events.RayTracedLine;
 import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
 import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 
@@ -19,7 +24,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 
-public class RayTracer implements RayTracerListener {
+public class RayTracer {
 
   SceneParser parser;
   RayTracerDisplay display;
@@ -28,6 +33,7 @@ public class RayTracer implements RayTracerListener {
   int frame = 1;
 
   private boolean save = false;
+  private EventBus rayTracingEventBus;
 
   public static void main(String[] args) throws IOException {
     Guice.createInjector(new AbstractModule() {
@@ -36,8 +42,10 @@ public class RayTracer implements RayTracerListener {
     }).getInstance(RayTracer.class).rayTraceFilePath(args[0]);
   }
 
-  @Override
   public void rayTraceFilePath(String filePathString) throws IOException {
+    this.rayTracingEventBus = new EventBus();
+    this.rayTracingEventBus.register(this);
+
     parser = getParser(filePathString);
 
     parser.parse(new String(Files.readAllBytes(Paths.get(filePathString)), Charsets.UTF_8));
@@ -45,9 +53,8 @@ public class RayTracer implements RayTracerListener {
 
     Camera c = parser.getCamera();
 
-    tracer = new RayTracerEngine(parsed_scene, c);
+    tracer = new RayTracerEngine(rayTracingEventBus, parsed_scene, c);
     tracer.setSuperSampling(parsed_scene.isSuperSampling());
-    tracer.setRayTracerListener(this);
 
     display = new RayTracerDisplay(tracer);
     display.setPreferredSize(c.getViewportSize());
@@ -65,13 +72,13 @@ public class RayTracer implements RayTracerListener {
 
 
 
-  @Override
-  public void traceStarted() {
+  @Subscribe
+  public void traceStarted(final RayTraceStarted evt) {
     System.out.println("Ray Tracing started");
   }
 
-  @Override
-  public void traceFinished() {
+  @Subscribe
+  public void traceFinished(final RayTraceFinished evt) {
     System.out.println("Ray Tracing finished");
 
     if (save) {
@@ -87,8 +94,8 @@ public class RayTracer implements RayTracerListener {
     }
   }
 
-  @Override
-  public void tracedLine(int lineCompleted) {
+  @Subscribe
+  public void tracedLine(final RayTracedLine evet) {
 
   }
 

@@ -1,5 +1,10 @@
 package net.andrewhatch.gfx.raytracer;
 
+import com.google.common.eventbus.EventBus;
+
+import net.andrewhatch.gfx.raytracer.events.RayTraceFinished;
+import net.andrewhatch.gfx.raytracer.events.RayTraceStarted;
+import net.andrewhatch.gfx.raytracer.events.RayTracedLine;
 import net.andrewhatch.gfx.raytracer.scene.core.Pixels;
 import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
 import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
@@ -13,6 +18,7 @@ import java.awt.image.ImageProducer;
 
 public class RayTracerEngine implements ImageProducer, Runnable {
 
+  private final EventBus rayTracingEventBus;
   public Camera camera;
   private int width;
   private int height;
@@ -22,13 +28,14 @@ public class RayTracerEngine implements ImageProducer, Runnable {
   private Thread thread;
   private ImageConsumer consumer;
   private Scene scene;
-  private RayTracerListener rtl;
   private boolean superSampling = false;
   private boolean finished = true;
   private double percent_complete = 0.0;
 
-  public RayTracerEngine(final Scene scene,
+  public RayTracerEngine(final EventBus rayTracingEventBus,
+                         final Scene scene,
                          final Camera camera) {
+    this.rayTracingEventBus = rayTracingEventBus;
     this.scene = scene;
     this.camera = camera;
     this.width = this.camera.getViewportSize().width;
@@ -37,10 +44,6 @@ public class RayTracerEngine implements ImageProducer, Runnable {
 
   public void setSuperSampling(final boolean flag) {
     this.superSampling = flag;
-  }
-
-  public void setRayTracerListener(final RayTracerListener l) {
-    this.rtl = l;
   }
 
   public void start() {
@@ -95,9 +98,8 @@ public class RayTracerEngine implements ImageProducer, Runnable {
 
   @Override
   public void run() {
-    if (rtl != null) {
-      rtl.traceStarted();
-    }
+    rayTracingEventBus.post(new RayTraceStarted());
+
     for (int y = 0; y < height; y++) {
       if (superSampling) {
         traceLineSuperSampling(y);
@@ -105,9 +107,8 @@ public class RayTracerEngine implements ImageProducer, Runnable {
         traceLine(y);
       }
 
-      if (rtl != null) {
-        rtl.tracedLine(y);
-      }
+      rayTracingEventBus.post(new RayTracedLine(y));
+
       synchronized (this) {
         lines_produced++;
         if (consumer != null) {
@@ -137,9 +138,8 @@ public class RayTracerEngine implements ImageProducer, Runnable {
         consumer.imageComplete(ImageConsumer.STATICIMAGEDONE);
       }
     }
-    if (rtl != null) {
-      rtl.traceFinished();
-    }
+
+    rayTracingEventBus.post(new RayTraceFinished());
 
     finished = true;
   }
