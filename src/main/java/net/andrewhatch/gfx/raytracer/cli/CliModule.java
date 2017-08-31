@@ -1,4 +1,4 @@
-package net.andrewhatch.gfx.raytracer;
+package net.andrewhatch.gfx.raytracer.cli;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -19,6 +19,8 @@ import javax.inject.Named;
 public class CliModule extends AbstractModule {
   private static final String OPTION_SAVE = "save";
   private static final String OPTION_SAVE_SHORT = "s";
+  private static final String OPTION_DISPLAY = "display";
+  private static final String OPTION_DISPLAY_SHORT = "d";
 
   private final String[] args;
 
@@ -48,6 +50,13 @@ public class CliModule extends AbstractModule {
 
   @Provides
   @Singleton
+  @Named("displayImage")
+  public boolean displayImage(final CommandLine commandLine) {
+    return commandLine.hasOption(OPTION_SAVE);
+  }
+
+  @Provides
+  @Singleton
   public CommandLine commandLine(final Options options) throws ParseException {
     final CommandLineParser parser = new DefaultParser();
 
@@ -61,6 +70,10 @@ public class CliModule extends AbstractModule {
 
     options.addOption(Option.builder(OPTION_SAVE_SHORT)
         .longOpt(OPTION_SAVE)
+        .build());
+
+    options.addOption(Option.builder(OPTION_DISPLAY_SHORT)
+        .longOpt(OPTION_DISPLAY)
         .build());
 
     return options;

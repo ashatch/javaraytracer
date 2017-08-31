@@ -1,4 +1,4 @@
-package net.andrewhatch.gfx.raytracer;
+package net.andrewhatch.gfx.raytracer.engine;
 
 import com.google.common.eventbus.EventBus;
 
@@ -98,7 +98,7 @@ public class RayTracerEngine implements ImageProducer, Runnable {
 
   @Override
   public void run() {
-    rayTracingEventBus.post(new RayTraceStarted(System.nanoTime()));
+    rayTracingEventBus.post(new RayTraceStarted(this.scene, this.camera, System.nanoTime()));
 
     for (int y = 0; y < height; y++) {
       if (superSampling) {

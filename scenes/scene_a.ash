@@ -57,7 +57,7 @@ optics:greyfloor {
     → 0.0 100.0 -600.000;
     lookAt 0.0 30.0 0.0;
     ambience 0.1 0.1 0.1;
-    maxDepth 4;
+    maxDepth 8;
 }
 
 ☼ {

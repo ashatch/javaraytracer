@@ -1,4 +1,6 @@
-package net.andrewhatch.gfx.raytracer;
+package net.andrewhatch.gfx.raytracer.display;
+
+import net.andrewhatch.gfx.raytracer.engine.RayTracerEngine;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

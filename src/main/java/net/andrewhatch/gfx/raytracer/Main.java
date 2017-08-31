@@ -2,6 +2,9 @@ package net.andrewhatch.gfx.raytracer;
 
 import com.google.inject.Guice;
 
+import net.andrewhatch.gfx.raytracer.cli.CliModule;
+import net.andrewhatch.gfx.raytracer.engine.RayTracer;
+
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 
