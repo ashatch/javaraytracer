@@ -5,6 +5,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.google.inject.Provides;
 
 import net.andrewhatch.gfx.raytracer.documentreaders.AshSceneParser;
 import net.andrewhatch.gfx.raytracer.documentreaders.SceneParser;
@@ -21,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
+import javax.inject.Inject;
 import javax.swing.*;
 
 
@@ -38,16 +40,27 @@ public class RayTracer {
   public static void main(String[] args) throws IOException {
     Guice.createInjector(new AbstractModule() {
       @Override
-      protected void configure() {}
+      protected void configure() {
+        bind(SceneParser.class).to(AshSceneParser.class);
+      }
+
+      @Provides
+      public EventBus eventBus() {
+        return new EventBus();
+      }
+
     }).getInstance(RayTracer.class).rayTraceFilePath(args[0]);
   }
 
-  public void rayTraceFilePath(String filePathString) throws IOException {
-    this.rayTracingEventBus = new EventBus();
+  @Inject
+  public RayTracer(final SceneParser parser,
+                   final EventBus eventBus) {
+    this.parser = parser;
+    this.rayTracingEventBus = eventBus;
     this.rayTracingEventBus.register(this);
+  }
 
-    parser = getParser(filePathString);
-
+  public void rayTraceFilePath(String filePathString) throws IOException {
     parser.parse(new String(Files.readAllBytes(Paths.get(filePathString)), Charsets.UTF_8));
     Scene parsed_scene = parser.getScene();
 
@@ -69,8 +82,6 @@ public class RayTracer {
     f.setVisible(true);
     tracer.start();
   }
-
-
 
   @Subscribe
   public void traceStarted(final RayTraceStarted evt) {
@@ -97,9 +108,5 @@ public class RayTracer {
   @Subscribe
   public void tracedLine(final RayTracedLine evet) {
 
-  }
-
-  private SceneParser getParser(final String doc) {
-    return new AshSceneParser();
   }
 }
