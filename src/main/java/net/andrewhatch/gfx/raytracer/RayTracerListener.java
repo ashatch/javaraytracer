@@ -7,9 +7,7 @@ public interface RayTracerListener {
 
   void traceFinished();
 
-  void traceAborted();
-
   void tracedLine(final int lineCompleted);
 
-  void go(String doc) throws IOException;
+  void rayTraceFilePath(final String doc) throws IOException;
 }

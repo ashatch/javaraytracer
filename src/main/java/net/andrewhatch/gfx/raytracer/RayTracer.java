@@ -33,13 +33,14 @@ public class RayTracer implements RayTracerListener {
     Guice.createInjector(new AbstractModule() {
       @Override
       protected void configure() {}
-    }).getInstance(RayTracer.class).go(args[0]);
+    }).getInstance(RayTracer.class).rayTraceFilePath(args[0]);
   }
 
-  public void go(String doc) throws IOException {
-    parser = getParser(doc);
+  @Override
+  public void rayTraceFilePath(String filePathString) throws IOException {
+    parser = getParser(filePathString);
 
-    parser.parse(new String(Files.readAllBytes(Paths.get(doc)), Charsets.UTF_8));
+    parser.parse(new String(Files.readAllBytes(Paths.get(filePathString)), Charsets.UTF_8));
     Scene parsed_scene = parser.getScene();
 
     Camera c = parser.getCamera();
@@ -52,7 +53,7 @@ public class RayTracer implements RayTracerListener {
     display.setPreferredSize(c.getViewportSize());
 
     display.addMessage("Supersampling: " + parsed_scene.isSuperSampling());
-    display.addMessage("Scene: " + doc);
+    display.addMessage("Scene: " + filePathString);
 
     JFrame f = new JFrame();
     f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -62,14 +63,14 @@ public class RayTracer implements RayTracerListener {
     tracer.start();
   }
 
-  private SceneParser getParser(String doc) {
-    return new AshSceneParser();
-  }
 
+
+  @Override
   public void traceStarted() {
     System.out.println("Ray Tracing started");
   }
 
+  @Override
   public void traceFinished() {
     System.out.println("Ray Tracing finished");
 
@@ -86,11 +87,12 @@ public class RayTracer implements RayTracerListener {
     }
   }
 
-  public void traceAborted() {
-    System.out.println("Ray Tracing aborted");
-  }
-
+  @Override
   public void tracedLine(int lineCompleted) {
 
+  }
+
+  private SceneParser getParser(final String doc) {
+    return new AshSceneParser();
   }
 }
