@@ -34,9 +34,8 @@ public class RayTracer {
   private final Optional<String> sourceFile;
   private final boolean saveImage;
 
-  SceneParser parser;
-  RayTracerDisplay display;
-  RayTracerEngine tracer;
+  private SceneParser parser;
+  private RayTracerDisplay display;
 
   int frame = 1;
 
@@ -64,7 +63,7 @@ public class RayTracer {
     final Scene parsed_scene = parser.getScene();
     final Camera camera = parser.getCamera();
 
-    tracer = new RayTracerEngine(rayTracingEventBus, parsed_scene, camera);
+    final RayTracerEngine tracer = new RayTracerEngine(rayTracingEventBus, parsed_scene, camera);
     tracer.setSuperSampling(parsed_scene.isSuperSampling());
 
     display = new RayTracerDisplay(tracer);
