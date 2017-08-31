@@ -24,11 +24,6 @@ public class RayTracerDisplay extends JPanel {
     rayTracedImage = createImage(this.rayTracerEngine);
   }
 
-  public void reset() {
-    rayTracedImage = createImage(this.rayTracerEngine);
-    clearMessages();
-  }
-
   public void addMessage(String msg) {
     this.messages.add(msg);
   }
@@ -44,17 +39,30 @@ public class RayTracerDisplay extends JPanel {
   @Override
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
-    if (off_gfx == null || buf_img == null) {
-      buf_img = new BufferedImage(rayTracerEngine.getWidth(),
-          rayTracerEngine.getHeight(),
-          BufferedImage.TYPE_INT_RGB);
-
-      off_gfx = buf_img.getGraphics();
-      fm = g.getFontMetrics(info_font);
+    if (!graphicsAreInitialized()) {
+      initializeGraphics(g);
     }
+
+    drawImage(g);
+    drawMessages(g);
+  }
+
+  private void drawImage(Graphics g) {
     off_gfx.drawImage(rayTracedImage, 0, 0, this);
     g.drawImage(buf_img, 0, 0, this);
-    drawMessages(g);
+  }
+
+  private boolean graphicsAreInitialized() {
+    return off_gfx != null && buf_img != null;
+  }
+
+  private void initializeGraphics(Graphics g) {
+    buf_img = new BufferedImage(rayTracerEngine.getWidth(),
+        rayTracerEngine.getHeight(),
+        BufferedImage.TYPE_INT_RGB);
+
+    off_gfx = buf_img.getGraphics();
+    fm = g.getFontMetrics(info_font);
   }
 
   private void drawMessages(final Graphics g) {
