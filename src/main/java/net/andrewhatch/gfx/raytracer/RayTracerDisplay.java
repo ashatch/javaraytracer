@@ -24,7 +24,7 @@ public class RayTracerDisplay extends JPanel {
     rayTracedImage = createImage(this.rayTracerEngine);
   }
 
-  public void addMessage(String msg) {
+  public void addMessage(final String msg) {
     this.messages.add(msg);
   }
 
@@ -37,7 +37,7 @@ public class RayTracerDisplay extends JPanel {
   }
 
   @Override
-  public void paintComponent(Graphics g) {
+  public void paintComponent(final Graphics g) {
     super.paintComponent(g);
     if (!graphicsAreInitialized()) {
       initializeGraphics(g);
@@ -47,7 +47,7 @@ public class RayTracerDisplay extends JPanel {
     drawMessages(g);
   }
 
-  private void drawImage(Graphics g) {
+  private void drawImage(final Graphics g) {
     off_gfx.drawImage(rayTracedImage, 0, 0, this);
     g.drawImage(buf_img, 0, 0, this);
   }
@@ -56,7 +56,7 @@ public class RayTracerDisplay extends JPanel {
     return off_gfx != null && buf_img != null;
   }
 
-  private void initializeGraphics(Graphics g) {
+  private void initializeGraphics(final Graphics g) {
     buf_img = new BufferedImage(rayTracerEngine.getWidth(),
         rayTracerEngine.getHeight(),
         BufferedImage.TYPE_INT_RGB);
