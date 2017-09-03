@@ -73,10 +73,13 @@ public class RayTracer {
     final RayTracerEngine tracer = new RayTracerEngine(rayTracingEventBus, parsed_scene, camera);
     tracer.setSuperSampling(parsed_scene.isSuperSampling());
 
-    this.actualRenderedImage = Toolkit.getDefaultToolkit().createImage(tracer);
+    final TracedImageProducer imageProducer = new TracedImageProducer(tracer);
+    rayTracingEventBus.register(imageProducer);
+
+//    this.actualRenderedImage = Toolkit.getDefaultToolkit().createImage(tracer);
 
     if (this.displayImage) {
-      this.rayTracingEventBus.register(new RayTracerDisplayer(tracer));
+      this.rayTracingEventBus.register(new RayTracerDisplayer(tracer, imageProducer));
     }
 
     final Thread thread = new Thread(tracer);
@@ -92,17 +95,17 @@ public class RayTracer {
   public void traceFinished(final RayTraceFinished evt) {
     logger.info("Ray Tracing finished at {}", evt.getNanoTime());
 
-    if (saveImage) {
-      renderedImage.getGraphics().drawImage(actualRenderedImage, 0, 0, null);
-
-      logger.info("Writing frame " + frame + " ... ");
-      try {
-        ImageIO.write(renderedImage, "PNG", new File("trace_" + frame + ".png"));
-      } catch (IOException e) {
-        logger.error("Problem writing image", e);
-      }
-      logger.info("Done.");
-    }
+//    if (saveImage) {
+//      renderedImage.getGraphics().drawImage(actualRenderedImage, 0, 0, null);
+//
+//      logger.info("Writing frame " + frame + " ... ");
+//      try {
+//        ImageIO.write(renderedImage, "PNG", new File("trace_" + frame + ".png"));
+//      } catch (IOException e) {
+//        logger.error("Problem writing image", e);
+//      }
+//      logger.info("Done.");
+//    }
   }
 
   @Subscribe

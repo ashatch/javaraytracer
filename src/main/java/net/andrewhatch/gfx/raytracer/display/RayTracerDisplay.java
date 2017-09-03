@@ -1,6 +1,7 @@
 package net.andrewhatch.gfx.raytracer.display;
 
 import net.andrewhatch.gfx.raytracer.engine.RayTracerEngine;
+import net.andrewhatch.gfx.raytracer.engine.TracedImageProducer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -20,10 +21,11 @@ public class RayTracerDisplay extends JPanel {
   private FontMetrics fm;
   private Vector<String> messages = new Vector<>();
 
-  public RayTracerDisplay(final RayTracerEngine rayTracerEngine) {
+  public RayTracerDisplay(final RayTracerEngine rayTracerEngine,
+                          final TracedImageProducer imageProducer) {
     super();
     this.rayTracerEngine = rayTracerEngine;
-    rayTracedImage = createImage(this.rayTracerEngine);
+    rayTracedImage = createImage(imageProducer);
   }
 
   public void addMessage(final String msg) {

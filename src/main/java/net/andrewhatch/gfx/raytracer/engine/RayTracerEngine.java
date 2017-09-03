@@ -11,25 +11,28 @@ import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
 import net.andrewhatch.gfx.raytracer.scene.rays.Ray;
 import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.image.ColorModel;
 import java.awt.image.ImageConsumer;
 import java.awt.image.ImageProducer;
 
 
-public class RayTracerEngine implements ImageProducer, Runnable {
+public class RayTracerEngine implements Runnable {
+
+  private static final Logger logger = LoggerFactory.getLogger(RayTracerEngine.class);
 
   private final EventBus rayTracingEventBus;
   public Camera camera;
   private int width;
   private int height;
   private Pixels pixels;
-  private int lines_produced;
-  private int lines_consumed;
-  private ImageConsumer consumer;
   private Scene scene;
   private boolean superSampling = false;
   private boolean finished = true;
   private double percent_complete = 0.0;
+  private int currentLine;
 
   public RayTracerEngine(final EventBus rayTracingEventBus,
                          final Scene scene,
@@ -39,8 +42,6 @@ public class RayTracerEngine implements ImageProducer, Runnable {
     this.camera = camera;
     this.width = this.camera.getViewportSize().width;
     this.height = this.camera.getViewportSize().height;
-    lines_produced = 0;
-    lines_consumed = 0;
     finished = false;
     percent_complete = 0.0;
     final int pix[] = new int[width * height];
@@ -52,50 +53,13 @@ public class RayTracerEngine implements ImageProducer, Runnable {
     this.superSampling = flag;
   }
 
-  @Override
-  public void addConsumer(final ImageConsumer ic) {
-    consumer = ic;
-    consumer.setColorModel(ColorModel.getRGBdefault());
-    consumer.setDimensions(width, height);
-    consumer.setHints(ImageConsumer.COMPLETESCANLINES | ImageConsumer.TOPDOWNLEFTRIGHT);
-    consumer = ic;
-  }
-
-  @Override
-  public boolean isConsumer(final ImageConsumer ic) {
-    return consumer == ic;
-
-  }
-
-  @Override
-  public void removeConsumer(final ImageConsumer ic) {
-    consumer = null;
-  }
-
-  @Override
-  public void startProduction(final ImageConsumer ic) {
-    addConsumer(ic);
-    if (lines_produced == height) {
-      requestTopDownLeftRightResend(consumer);
-    }
-  }
-
-  @Override
-  public void requestTopDownLeftRightResend(final ImageConsumer ic) {
-    ic.setHints(ImageConsumer.TOPDOWNLEFTRIGHT);
-    ic.setPixels(0, 0, width, lines_produced, ColorModel.getRGBdefault(), pixels.getPixels(), 0, width);
-    lines_consumed = lines_produced;
-    if (lines_produced == height) {
-      ic.imageComplete(ImageConsumer.STATICIMAGEDONE);
-    }
-  }
-
 
   @Override
   public void run() {
     notifyRayTraceStarted();
 
     for (int y = 0; y < height; y++) {
+      this.currentLine = y;
       if (superSampling) {
         traceLineSuperSampling(y);
       } else {
@@ -115,32 +79,9 @@ public class RayTracerEngine implements ImageProducer, Runnable {
 
   private void notifyRayTracedALine(final int line) {
     rayTracingEventBus.post(new RayTracedLine(line));
-    lines_produced++;
-    if (consumer != null) {
-      // give pixels to the consumer
-
-      consumer.setPixels(
-          0,                // starting x
-          lines_consumed,          // starting y
-          width,              // width
-          lines_produced - lines_consumed,// height
-          ColorModel.getRGBdefault(),  // color model
-          pixels.getPixels(),            // array of imagePixels
-          lines_consumed * width,    // offset into array
-          width);              // line width
-
-      lines_consumed = lines_produced;
-
-      // Tell the consumer to update the display
-      consumer.imageComplete(ImageConsumer.SINGLEFRAMEDONE);
-    }
   }
 
   private void notifyRayTraceFinished() {
-    if (consumer != null) {
-      consumer.imageComplete(ImageConsumer.STATICIMAGEDONE);
-    }
-
     rayTracingEventBus.post(new RayTraceFinished(System.nanoTime()));
   }
 
@@ -149,7 +90,7 @@ public class RayTracerEngine implements ImageProducer, Runnable {
   }
 
   public double getPercentComplete() {
-    this.percent_complete = (double) lines_produced / (double) height * 100.0;
+    this.percent_complete = (double) this.currentLine / (double) height * 100.0;
     return this.percent_complete;
   }
 
@@ -192,5 +133,9 @@ public class RayTracerEngine implements ImageProducer, Runnable {
 
   public void setScene(Scene s) {
     this.scene = s;
+  }
+
+  public Pixels getPixels() {
+    return this.pixels;
   }
 }
