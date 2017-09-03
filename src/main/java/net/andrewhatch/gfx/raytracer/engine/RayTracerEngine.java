@@ -93,7 +93,7 @@ public class RayTracerEngine implements ImageProducer, Runnable {
 
   @Override
   public void run() {
-    rayTracingEventBus.post(new RayTraceStarted(this.scene, this.camera, System.nanoTime()));
+    notifyRayTraceStarted();
 
     for (int y = 0; y < height; y++) {
       if (superSampling) {
@@ -102,41 +102,46 @@ public class RayTracerEngine implements ImageProducer, Runnable {
         traceLine(y);
       }
 
-      rayTracingEventBus.post(new RayTracedLine(y));
-
-      synchronized (this) {
-        lines_produced++;
-        if (consumer != null) {
-          // give pixels to the consumer
-
-          consumer.setPixels(
-              0,                // starting x
-              lines_consumed,          // starting y
-              width,              // width
-              lines_produced - lines_consumed,// height
-              ColorModel.getRGBdefault(),  // color model
-              pixels.getPixels(),            // array of imagePixels
-              lines_consumed * width,    // offset into array
-              width);              // line width
-
-          lines_consumed = lines_produced;
-
-          // Tell the consumer to update the display
-          consumer.imageComplete(ImageConsumer.SINGLEFRAMEDONE);
-        }
-      }
-
-
+      notifyRayTracedALine(y);
     }
-    synchronized (this) {
-      if (consumer != null) {
-        consumer.imageComplete(ImageConsumer.STATICIMAGEDONE);
-      }
+
+    finished = true;
+    notifyRayTraceFinished();
+  }
+
+  private void notifyRayTraceStarted() {
+    rayTracingEventBus.post(new RayTraceStarted(this.scene, this.camera, System.nanoTime()));
+  }
+
+  private void notifyRayTracedALine(final int line) {
+    rayTracingEventBus.post(new RayTracedLine(line));
+    lines_produced++;
+    if (consumer != null) {
+      // give pixels to the consumer
+
+      consumer.setPixels(
+          0,                // starting x
+          lines_consumed,          // starting y
+          width,              // width
+          lines_produced - lines_consumed,// height
+          ColorModel.getRGBdefault(),  // color model
+          pixels.getPixels(),            // array of imagePixels
+          lines_consumed * width,    // offset into array
+          width);              // line width
+
+      lines_consumed = lines_produced;
+
+      // Tell the consumer to update the display
+      consumer.imageComplete(ImageConsumer.SINGLEFRAMEDONE);
+    }
+  }
+
+  private void notifyRayTraceFinished() {
+    if (consumer != null) {
+      consumer.imageComplete(ImageConsumer.STATICIMAGEDONE);
     }
 
     rayTracingEventBus.post(new RayTraceFinished(System.nanoTime()));
-
-    finished = true;
   }
 
   public boolean isFinished() {
