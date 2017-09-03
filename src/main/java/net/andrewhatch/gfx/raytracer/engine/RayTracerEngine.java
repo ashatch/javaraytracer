@@ -25,7 +25,6 @@ public class RayTracerEngine implements ImageProducer, Runnable {
   private Pixels pixels;
   private int lines_produced;
   private int lines_consumed;
-  private Thread thread;
   private ImageConsumer consumer;
   private Scene scene;
   private boolean superSampling = false;
@@ -40,21 +39,17 @@ public class RayTracerEngine implements ImageProducer, Runnable {
     this.camera = camera;
     this.width = this.camera.getViewportSize().width;
     this.height = this.camera.getViewportSize().height;
-  }
-
-  public void setSuperSampling(final boolean flag) {
-    this.superSampling = flag;
-  }
-
-  public void start() {
     lines_produced = 0;
     lines_consumed = 0;
     finished = false;
     percent_complete = 0.0;
     final int pix[] = new int[width * height];
     pixels = new Pixels(pix, width, height);
-    thread = new Thread(this);
-    thread.start();
+
+  }
+
+  public void setSuperSampling(final boolean flag) {
+    this.superSampling = flag;
   }
 
   @Override

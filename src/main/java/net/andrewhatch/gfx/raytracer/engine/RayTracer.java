@@ -79,7 +79,8 @@ public class RayTracer {
       this.rayTracingEventBus.register(new RayTracerDisplayer(tracer));
     }
 
-    tracer.start();
+    final Thread thread = new Thread(tracer);
+    thread.start();
   }
 
   @Subscribe
