@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
@@ -36,11 +38,9 @@ public class RayTracer {
 
   private SceneParser parser;
 
-  int frame = 1;
-
   private EventBus rayTracingEventBus;
-  private BufferedImage renderedImage;
-  private Image actualRenderedImage;
+//  private BufferedImage renderedImage;
+//  private Image actualRenderedImage;
 
   @Inject
   public RayTracer(final SceneParser parser,
@@ -66,9 +66,9 @@ public class RayTracer {
     final Scene parsed_scene = parser.getScene();
     final Camera camera = parser.getCamera();
 
-    this.renderedImage = new BufferedImage(camera.getViewportSize().width,
-        camera.getViewportSize().height,
-        BufferedImage.TYPE_INT_RGB);
+//    this.renderedImage = new BufferedImage(camera.getViewportSize().width,
+//        camera.getViewportSize().height,
+//        BufferedImage.TYPE_INT_RGB);
 
     final RayTracerEngine tracer = new RayTracerEngine(rayTracingEventBus, parsed_scene, camera);
     tracer.setSuperSampling(parsed_scene.isSuperSampling());
@@ -82,8 +82,12 @@ public class RayTracer {
       this.rayTracingEventBus.register(new RayTracerDisplayer(tracer, imageProducer));
     }
 
-    final Thread thread = new Thread(tracer);
-    thread.start();
+    final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    executorService.submit(() -> {
+      while (!tracer.isFinished()) {
+        tracer.step();
+      }
+    });
   }
 
   @Subscribe

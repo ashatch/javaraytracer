@@ -14,12 +14,8 @@ import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.image.ColorModel;
-import java.awt.image.ImageConsumer;
-import java.awt.image.ImageProducer;
 
-
-public class RayTracerEngine implements Runnable {
+public class RayTracerEngine {
 
   private static final Logger logger = LoggerFactory.getLogger(RayTracerEngine.class);
 
@@ -30,9 +26,10 @@ public class RayTracerEngine implements Runnable {
   private Pixels pixels;
   private Scene scene;
   private boolean superSampling = false;
+  private boolean started = false;
   private boolean finished = true;
   private double percent_complete = 0.0;
-  private int currentLine;
+  private int currentLine = 0;
 
   public RayTracerEngine(final EventBus rayTracingEventBus,
                          final Scene scene,
@@ -46,31 +43,45 @@ public class RayTracerEngine implements Runnable {
     percent_complete = 0.0;
     final int pix[] = new int[width * height];
     pixels = new Pixels(pix, width, height);
-
   }
 
   public void setSuperSampling(final boolean flag) {
     this.superSampling = flag;
   }
 
-
-  @Override
-  public void run() {
-    notifyRayTraceStarted();
-
-    for (int y = 0; y < height; y++) {
-      this.currentLine = y;
-      if (superSampling) {
-        traceLineSuperSampling(y);
-      } else {
-        traceLine(y);
-      }
-
-      notifyRayTracedALine(y);
+  public void step() {
+    if (finished) {
+      return;
+    }
+    if (!started) {
+      startRender();
     }
 
-    finished = true;
-    notifyRayTraceFinished();
+    scanNextLine();
+  }
+
+  private void startRender() {
+    notifyRayTraceStarted();
+    this.started = true;
+  }
+
+  private void scanNextLine() {
+
+    if (currentLine == height) {
+      finished = true;
+      notifyRayTraceFinished();
+      return;
+    }
+
+    if (superSampling) {
+      traceLineSuperSampling(currentLine);
+    } else {
+      traceLine(currentLine);
+    }
+
+    notifyRayTracedALine(currentLine);
+
+    currentLine++;
   }
 
   private void notifyRayTraceStarted() {
