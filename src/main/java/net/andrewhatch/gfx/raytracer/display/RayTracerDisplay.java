@@ -82,4 +82,8 @@ public class RayTracerDisplay extends JPanel {
       }
     }
   }
+
+  public BufferedImage getRayTracedImage() {
+    return buf_img;
+  }
 }

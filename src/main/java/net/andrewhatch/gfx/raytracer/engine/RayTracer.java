@@ -39,8 +39,7 @@ public class RayTracer {
   private SceneParser parser;
 
   private EventBus rayTracingEventBus;
-//  private BufferedImage renderedImage;
-//  private Image actualRenderedImage;
+  private RayTracerDisplayer rayTracerDisplayer;
 
   @Inject
   public RayTracer(final SceneParser parser,
@@ -49,15 +48,32 @@ public class RayTracer {
                    final @Named("saveImage") boolean saveImage,
                    final @Named("displayImage") boolean displayImage) {
     this.sourceFile = sourceFile;
-
     this.parser = parser;
     this.saveImage = saveImage;
     this.displayImage = displayImage;
     this.rayTracingEventBus = eventBus;
-    this.rayTracingEventBus.register(this);
   }
 
   public void rayTraceFilePath() throws IOException {
+    final RayTracerEngine rayTracerEngine = getTracer();
+
+    final TracedImageProducer imageProducer = new TracedImageProducer(rayTracerEngine);
+    rayTracingEventBus.register(imageProducer);
+
+    if (this.displayImage) {
+      this.rayTracerDisplayer = new RayTracerDisplayer(rayTracerEngine, imageProducer, saveImage);
+      this.rayTracingEventBus.register(rayTracerDisplayer);
+    }
+
+    final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    executorService.submit(() -> {
+      while (!rayTracerEngine.isFinished()) {
+        rayTracerEngine.step();
+      }
+    });
+  }
+
+  public RayTracerEngine getTracer() throws IOException {
     final String filePath = sourceFile.orElseThrow(() ->
         new IllegalArgumentException("Must supply a source file"));
 
@@ -66,54 +82,8 @@ public class RayTracer {
     final Scene parsed_scene = parser.getScene();
     final Camera camera = parser.getCamera();
 
-//    this.renderedImage = new BufferedImage(camera.getViewportSize().width,
-//        camera.getViewportSize().height,
-//        BufferedImage.TYPE_INT_RGB);
-
     final RayTracerEngine tracer = new RayTracerEngine(rayTracingEventBus, parsed_scene, camera);
     tracer.setSuperSampling(parsed_scene.isSuperSampling());
-
-    final TracedImageProducer imageProducer = new TracedImageProducer(tracer);
-    rayTracingEventBus.register(imageProducer);
-
-//    this.actualRenderedImage = Toolkit.getDefaultToolkit().createImage(tracer);
-
-    if (this.displayImage) {
-      this.rayTracingEventBus.register(new RayTracerDisplayer(tracer, imageProducer));
-    }
-
-    final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    executorService.submit(() -> {
-      while (!tracer.isFinished()) {
-        tracer.step();
-      }
-    });
-  }
-
-  @Subscribe
-  public void traceStarted(final RayTraceStarted evt) {
-    logger.info("Ray Tracing started at {}", evt.getNanoTime());
-  }
-
-  @Subscribe
-  public void traceFinished(final RayTraceFinished evt) {
-    logger.info("Ray Tracing finished at {}", evt.getNanoTime());
-
-//    if (saveImage) {
-//      renderedImage.getGraphics().drawImage(actualRenderedImage, 0, 0, null);
-//
-//      logger.info("Writing frame " + frame + " ... ");
-//      try {
-//        ImageIO.write(renderedImage, "PNG", new File("trace_" + frame + ".png"));
-//      } catch (IOException e) {
-//        logger.error("Problem writing image", e);
-//      }
-//      logger.info("Done.");
-//    }
-  }
-
-  @Subscribe
-  public void tracedLine(final RayTracedLine event) {
-    logger.trace("Traced line {}", event.getLineNumber());
+    return tracer;
   }
 }
