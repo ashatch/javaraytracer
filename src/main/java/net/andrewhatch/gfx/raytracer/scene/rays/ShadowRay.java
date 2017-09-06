@@ -7,9 +7,9 @@ import net.andrewhatch.gfx.raytracer.scene.optics.Colour;
 import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 
 public class ShadowRay extends Ray {
-  private double attenuation;
   public double cosine;
   public double light_brightness;
+  private double attenuation;
 
   public ShadowRay(Scene scene, Point origin, Vector dir, int depth) {
     super(scene, origin, dir, depth);

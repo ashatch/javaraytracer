@@ -6,9 +6,12 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
+import net.andrewhatch.gfx.raytracer.display.RayTracerDisplay;
+import net.andrewhatch.gfx.raytracer.display.RayTracerDisplayer;
 import net.andrewhatch.gfx.raytracer.documentreaders.AshSceneParser;
 import net.andrewhatch.gfx.raytracer.documentreaders.SceneParser;
 import net.andrewhatch.gfx.raytracer.engine.RayTracerEngine;
+import net.andrewhatch.gfx.raytracer.engine.TracedImageProducer;
 import net.andrewhatch.gfx.raytracer.scene.camera.Camera;
 import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 
@@ -47,5 +50,28 @@ public class RayTracerModule extends AbstractModule {
     final RayTracerEngine tracer = new RayTracerEngine(rayTracingEventBus, parsed_scene, camera);
     tracer.setSuperSampling(parsed_scene.isSuperSampling());
     return tracer;
+  }
+
+  @Provides
+  @Singleton
+  public RayTracerDisplayer displayer(final RayTracerDisplay display,
+                                      final @Named("saveImage") boolean saveImage) {
+    return new RayTracerDisplayer(display, saveImage);
+  }
+
+  @Provides
+  @Singleton
+  public TracedImageProducer rayTracedImageProducer(final RayTracerEngine engine,
+                                                    final EventBus eventBus) {
+    final TracedImageProducer tracedImageProducer = new TracedImageProducer(engine);
+    eventBus.register(tracedImageProducer);
+    return tracedImageProducer;
+  }
+
+  @Provides
+  @Singleton
+  public RayTracerDisplay rayTracerDisplay(final RayTracerEngine rayTracerEngine,
+                                           final TracedImageProducer imageProducer) {
+    return new RayTracerDisplay(rayTracerEngine, imageProducer);
   }
 }

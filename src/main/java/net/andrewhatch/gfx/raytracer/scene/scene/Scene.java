@@ -23,7 +23,7 @@ public class Scene {
 
   public void addSceneObject(SceneObject obj) {
     if (obj instanceof Light) {
-      this.lighting.addLight((Light)obj);
+      this.lighting.addLight((Light) obj);
     }
     obj.setScene(this);
     objs.add(obj);

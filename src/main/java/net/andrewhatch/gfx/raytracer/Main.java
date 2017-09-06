@@ -15,13 +15,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 public class Main {
-  public static void main(String[] args) {
-    Guice.createInjector(
-        new CliModule(args),
-        new RayTracerModule()
-    ).getInstance(Main.class);
-  }
-
   @Inject
   public Main(final RayTracer rayTracer,
               @Named("sourceFile") final Optional<String> sourceFile,
@@ -32,5 +25,12 @@ public class Main {
     } else {
       helpFormatter.printHelp(Main.class.getName(), options);
     }
+  }
+
+  public static void main(String[] args) {
+    Guice.createInjector(
+        new CliModule(args),
+        new RayTracerModule()
+    ).getInstance(Main.class);
   }
 }

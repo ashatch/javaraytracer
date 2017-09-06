@@ -49,7 +49,7 @@ public class Camera implements Positionable {
   }
 
   public Dimension getViewportSize() {
-    return new Dimension((int)viewportXSize, (int) viewportYSize);
+    return new Dimension((int) viewportXSize, (int) viewportYSize);
   }
 
   @Override

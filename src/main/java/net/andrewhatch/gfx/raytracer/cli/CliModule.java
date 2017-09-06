@@ -29,7 +29,8 @@ public class CliModule extends AbstractModule {
   }
 
   @Override
-  protected void configure() {}
+  protected void configure() {
+  }
 
   @Provides
   @Singleton

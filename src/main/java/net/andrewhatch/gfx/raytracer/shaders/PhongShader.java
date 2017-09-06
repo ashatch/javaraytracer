@@ -18,16 +18,14 @@ import java.util.List;
 
 public class PhongShader extends Shader {
 
+  protected Point intersect;
   // Secondary rays
   private Ray reflectedRay;
   private RefractedRay refractedRay;
-
   // geometry
   private Vector normal;
   private List<ShadowRay> shadowRays = new ArrayList<ShadowRay>();
   private double cosine;
-
-  protected Point intersect;
 
   public PhongShader(Scene scene, Ray incident_ray, RayHitInfo hit, SceneObject obj) {
     super(scene, incident_ray, obj);

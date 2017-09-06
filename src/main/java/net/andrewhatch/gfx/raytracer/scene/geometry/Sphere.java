@@ -25,11 +25,6 @@ public class Sphere extends SceneObject {
     set(center, radius, optics);
   }
 
-  public void setRadius(double radius) {
-    this.radius = radius;
-    this.radiusSquared = radius * radius;
-  }
-
   public void set(Point center, double radius, OpticalProperties optics) {
     this.center = center;
     setRadius(radius);
@@ -91,6 +86,11 @@ public class Sphere extends SceneObject {
 
   public double getRadius() {
     return radius;
+  }
+
+  public void setRadius(double radius) {
+    this.radius = radius;
+    this.radiusSquared = radius * radius;
   }
 
   public Vector getNormal(Point intersect) {

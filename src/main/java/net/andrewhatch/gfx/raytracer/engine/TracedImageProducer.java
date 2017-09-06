@@ -18,6 +18,7 @@ public class TracedImageProducer implements ImageProducer {
   public TracedImageProducer(final RayTracerEngine engine) {
     this.engine = engine;
   }
+
   @Override
   public void addConsumer(final ImageConsumer ic) {
     consumer = ic;
