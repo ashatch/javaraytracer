@@ -2,8 +2,6 @@ package net.andrewhatch.gfx.raytracer.display;
 
 import com.google.common.eventbus.Subscribe;
 
-import net.andrewhatch.gfx.raytracer.engine.RayTracerEngine;
-import net.andrewhatch.gfx.raytracer.engine.TracedImageProducer;
 import net.andrewhatch.gfx.raytracer.events.RayTraceFinished;
 import net.andrewhatch.gfx.raytracer.events.RayTraceStarted;
 
@@ -21,24 +19,20 @@ import javax.swing.*;
 public class RayTracerDisplayer {
   private static final Logger logger = LoggerFactory.getLogger(RayTracerDisplayer.class);
 
-  private final RayTracerEngine rayTracerEngine;
-  private final TracedImageProducer imageProducer;
   private final boolean saveImage;
   private RayTracerDisplay display;
 
   @Inject
-  public RayTracerDisplayer(final RayTracerEngine rayTracerEngine,
-                            final TracedImageProducer imageProducer,
+  public RayTracerDisplayer(final RayTracerDisplay rayTracerDisplay,
                             final boolean saveImage) {
-    this.rayTracerEngine = rayTracerEngine;
-    this.imageProducer = imageProducer;
     this.saveImage = saveImage;
+    this.display = rayTracerDisplay;
   }
 
   @Subscribe
   public void traceStarted(final RayTraceStarted evt) {
     EventQueue.invokeLater(() -> {
-      display = new RayTracerDisplay(rayTracerEngine, imageProducer);
+
       display.setPreferredSize(evt.getCamera().getViewportSize());
 
       display.addMessage("Supersampling: " + evt.getScene().isSuperSampling());

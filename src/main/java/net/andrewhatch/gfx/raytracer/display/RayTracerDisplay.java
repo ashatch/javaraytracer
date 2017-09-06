@@ -13,6 +13,7 @@ import javax.swing.*;
 public class RayTracerDisplay extends JPanel {
 
   private static final long serialVersionUID = -1875042609484267735L;
+  private final TracedImageProducer imageProducer;
   private RayTracerEngine rayTracerEngine;
   private Image rayTracedImage;
   private BufferedImage buf_img;
@@ -25,19 +26,11 @@ public class RayTracerDisplay extends JPanel {
                           final TracedImageProducer imageProducer) {
     super();
     this.rayTracerEngine = rayTracerEngine;
-    rayTracedImage = createImage(imageProducer);
+    this.imageProducer = imageProducer;
   }
 
   public void addMessage(final String msg) {
     this.messages.add(msg);
-  }
-
-  public void clearMessages() {
-    this.messages.removeAllElements();
-  }
-
-  public BufferedImage getTracedImage() {
-    return buf_img;
   }
 
   @Override
@@ -61,6 +54,8 @@ public class RayTracerDisplay extends JPanel {
   }
 
   private void initializeGraphics(final Graphics g) {
+    rayTracedImage = createImage(imageProducer);
+
     buf_img = new BufferedImage(rayTracerEngine.getWidth(),
         rayTracerEngine.getHeight(),
         BufferedImage.TYPE_INT_RGB);

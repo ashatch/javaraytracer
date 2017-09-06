@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
+import net.andrewhatch.gfx.raytracer.display.RayTracerDisplay;
 import net.andrewhatch.gfx.raytracer.display.RayTracerDisplayer;
 import net.andrewhatch.gfx.raytracer.documentreaders.SceneParser;
 import net.andrewhatch.gfx.raytracer.events.RayTraceFinished;
@@ -61,7 +62,8 @@ public class RayTracer {
     rayTracingEventBus.register(imageProducer);
 
     if (this.displayImage) {
-      this.rayTracerDisplayer = new RayTracerDisplayer(rayTracerEngine, imageProducer, saveImage);
+      final RayTracerDisplay display = new RayTracerDisplay(rayTracerEngine, imageProducer);
+      this.rayTracerDisplayer = new RayTracerDisplayer(display, saveImage);
       this.rayTracingEventBus.register(rayTracerDisplayer);
     }
 
