@@ -10,7 +10,7 @@ import net.andrewhatch.gfx.raytracer.events.RayTraceStarted;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.image.RenderedImage;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -37,16 +37,18 @@ public class RayTracerDisplayer {
 
   @Subscribe
   public void traceStarted(final RayTraceStarted evt) {
-    display = new RayTracerDisplay(rayTracerEngine, imageProducer);
-    display.setPreferredSize(evt.getCamera().getViewportSize());
+    EventQueue.invokeLater(() -> {
+      display = new RayTracerDisplay(rayTracerEngine, imageProducer);
+      display.setPreferredSize(evt.getCamera().getViewportSize());
 
-    display.addMessage("Supersampling: " + evt.getScene().isSuperSampling());
+      display.addMessage("Supersampling: " + evt.getScene().isSuperSampling());
 
-    JFrame f = new JFrame();
-    f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    f.add(display);
-    f.pack();
-    f.setVisible(true);
+      JFrame f = new JFrame();
+      f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+      f.add(display);
+      f.pack();
+      f.setVisible(true);
+    });
   }
 
   @Subscribe
@@ -54,12 +56,15 @@ public class RayTracerDisplayer {
     logger.info("Ray Tracing finished at {}", evt.getNanoTime());
 
     if (saveImage) {
-      try {
-        ImageIO.write(this.display.getRayTracedImage(), "PNG", new File("trace.png"));
-      } catch (IOException e) {
-        logger.error("Problem writing image", e);
-      }
-      logger.info("Done.");
+      logger.info("Requesting image save");
+      EventQueue.invokeLater(() -> {
+        try {
+          ImageIO.write(display.getRayTracedImage(), "PNG", new File("trace.png"));
+          logger.info("Image saved.");
+        } catch (IOException e) {
+          logger.error("Problem writing image", e);
+        }
+      });
     }
   }
 }
