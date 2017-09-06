@@ -37,14 +37,17 @@ public class RayTracer {
 
   public void rayTraceFilePath() throws IOException {
     if (this.displayImage) {
+      logger.info("Registering display");
       this.rayTracingEventBus.register(rayTracerDisplayer);
     }
 
+    logger.info("Starting ray tracing");
     final ExecutorService executorService = Executors.newSingleThreadExecutor();
     executorService.submit(() -> {
       while (!rayTracerEngine.isFinished()) {
         rayTracerEngine.step();
       }
     });
+    logger.info("Ray tracing started on executor thread.");
   }
 }
