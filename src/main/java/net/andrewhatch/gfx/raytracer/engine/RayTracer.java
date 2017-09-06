@@ -33,31 +33,25 @@ import javax.inject.Named;
 public class RayTracer {
   private static final Logger logger = LoggerFactory.getLogger(RayTracer.class);
 
-  private final Optional<String> sourceFile;
   private final boolean saveImage;
   private final boolean displayImage;
-
-  private SceneParser parser;
+  private final RayTracerEngine rayTracerEngine;
 
   private EventBus rayTracingEventBus;
   private RayTracerDisplayer rayTracerDisplayer;
 
   @Inject
-  public RayTracer(final SceneParser parser,
+  public RayTracer(final RayTracerEngine rayTracerEngine,
                    final EventBus eventBus,
-                   final @Named("sourceFile") Optional<String> sourceFile,
                    final @Named("saveImage") boolean saveImage,
                    final @Named("displayImage") boolean displayImage) {
-    this.sourceFile = sourceFile;
-    this.parser = parser;
+    this.rayTracerEngine = rayTracerEngine;
     this.saveImage = saveImage;
     this.displayImage = displayImage;
     this.rayTracingEventBus = eventBus;
   }
 
   public void rayTraceFilePath() throws IOException {
-    final RayTracerEngine rayTracerEngine = getTracer();
-
     final TracedImageProducer imageProducer = new TracedImageProducer(rayTracerEngine);
     rayTracingEventBus.register(imageProducer);
 
@@ -75,17 +69,5 @@ public class RayTracer {
     });
   }
 
-  public RayTracerEngine getTracer() throws IOException {
-    final String filePath = sourceFile.orElseThrow(() ->
-        new IllegalArgumentException("Must supply a source file"));
 
-    parser.parse(new String(Files.readAllBytes(Paths.get(filePath)), Charsets.UTF_8));
-
-    final Scene parsed_scene = parser.getScene();
-    final Camera camera = parser.getCamera();
-
-    final RayTracerEngine tracer = new RayTracerEngine(rayTracingEventBus, parsed_scene, camera);
-    tracer.setSuperSampling(parsed_scene.isSuperSampling());
-    return tracer;
-  }
 }
