@@ -4,6 +4,7 @@ import com.google.common.eventbus.Subscribe;
 
 import net.andrewhatch.gfx.raytracer.events.RayTraceFinished;
 import net.andrewhatch.gfx.raytracer.events.RayTraceStarted;
+import net.andrewhatch.gfx.raytracer.events.RayTracedLine;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ public class RayTracerDisplayer {
 
   @Subscribe
   public void traceStarted(final RayTraceStarted evt) {
+    logger.trace("Ray trace started at {}", evt.getNanoTime());
     EventQueue.invokeLater(() -> {
 
       display.setPreferredSize(evt.getCamera().getViewportSize());
@@ -43,6 +45,11 @@ public class RayTracerDisplayer {
       f.pack();
       f.setVisible(true);
     });
+  }
+
+  @Subscribe
+  public void traceLine(final RayTracedLine event) {
+    logger.trace("Line {}", event.getLineNumber());
   }
 
   @Subscribe

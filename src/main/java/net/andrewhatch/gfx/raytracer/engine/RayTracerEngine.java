@@ -49,7 +49,7 @@ public class RayTracerEngine {
     this.superSampling = flag;
   }
 
-  public void step() {
+  void step() {
     if (finished) {
       return;
     }
@@ -61,6 +61,7 @@ public class RayTracerEngine {
   }
 
   private void startRender() {
+    logger.info("Render started");
     notifyRayTraceStarted();
     this.started = true;
   }
@@ -69,6 +70,7 @@ public class RayTracerEngine {
 
     if (currentLine == height) {
       finished = true;
+      logger.info("Render Finished");
       notifyRayTraceFinished();
       return;
     }
@@ -105,17 +107,16 @@ public class RayTracerEngine {
     return this.percent_complete;
   }
 
-  public void traceLine(final int y) {
+  private void traceLine(final int y) {
     for (int x = 0; x < width; x++) {
       final Ray r = camera.generateRay(scene, x, y);
       final Colour shade = new Colour();
       r.fire(shade);
       pixels.getPixels()[(y * width) + x] = shade.getRGB();
-
     }
   }
 
-  public void traceLineSuperSampling(int y) {
+  private void traceLineSuperSampling(int y) {
     final int side = 2;
     for (int x = 0; x < width; x++) {
       final Ray[][] r = camera.generateSupersampledRays(scene, x, y, 2, 4.0);
@@ -146,7 +147,7 @@ public class RayTracerEngine {
     this.scene = s;
   }
 
-  public Pixels getPixels() {
+  Pixels getPixels() {
     return this.pixels;
   }
 }

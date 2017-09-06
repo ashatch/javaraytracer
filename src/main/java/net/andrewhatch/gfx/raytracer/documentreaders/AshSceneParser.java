@@ -28,7 +28,6 @@ public class AshSceneParser extends SceneBaseListener implements SceneParser {
   private final Map<String, OpticalProperties> optics = new HashMap<>();
   private Scene scene;
   private Camera camera;
-  private Vector viewpoint;
   private Vector currentVector;
   private double currentRadius;
   private OpticalProperties currentOptics;

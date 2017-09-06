@@ -5,7 +5,6 @@ import net.andrewhatch.gfx.raytracer.engine.TracedImageProducer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.*;
@@ -29,7 +28,7 @@ public class RayTracerDisplay extends JPanel {
     this.imageProducer = imageProducer;
   }
 
-  public void addMessage(final String msg) {
+  void addMessage(final String msg) {
     this.messages.add(msg);
   }
 
@@ -70,15 +69,14 @@ public class RayTracerDisplay extends JPanel {
     if (!rayTracerEngine.isFinished()) {
       int y = 10;
       g.drawString("Rendering..." + (int) rayTracerEngine.getPercentComplete() + "%", 10, y);
-      final Iterator<String> i = messages.iterator();
-      while (i.hasNext()) {
+      for (String message : messages) {
         y += fm.getHeight();
-        g.drawString(i.next(), 10, y);
+        g.drawString(message, 10, y);
       }
     }
   }
 
-  public BufferedImage getRayTracedImage() {
+  BufferedImage getRayTracedImage() {
     return buf_img;
   }
 }
