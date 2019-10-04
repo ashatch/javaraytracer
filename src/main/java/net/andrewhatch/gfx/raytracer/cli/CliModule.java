@@ -53,7 +53,7 @@ public class CliModule extends AbstractModule {
   @Singleton
   @Named("displayImage")
   public boolean displayImage(final CommandLine commandLine) {
-    return commandLine.hasOption(OPTION_SAVE);
+    return commandLine.hasOption(OPTION_DISPLAY);
   }
 
   @Provides
