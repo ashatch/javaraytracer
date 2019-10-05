@@ -17,8 +17,7 @@ import javax.inject.Named;
 public class RayTracer {
   private static final Logger logger = LoggerFactory.getLogger(RayTracer.class);
 
-
-  private final boolean displayImage;
+  private final boolean headlessMode;
   private final RayTracerEngine rayTracerEngine;
   private EventBus rayTracingEventBus;
   private RayTracerDisplayer rayTracerDisplayer;
@@ -28,17 +27,17 @@ public class RayTracer {
     final RayTracerEngine rayTracerEngine,
     final RayTracerDisplayer displayer,
     final EventBus eventBus,
-    final @Named("displayImage") boolean displayImage
+    final @Named("headless") boolean headlessMode
   ) {
     this.rayTracerEngine = rayTracerEngine;
     this.rayTracerDisplayer = displayer;
-    this.displayImage = displayImage;
+    this.headlessMode = headlessMode;
     this.rayTracingEventBus = eventBus;
 
   }
 
   public void rayTraceFilePath() throws IOException {
-    if (this.displayImage) {
+    if (!this.headlessMode) {
       logger.info("Registering display");
       this.rayTracingEventBus.register(rayTracerDisplayer);
     }

@@ -18,7 +18,6 @@ import net.andrewhatch.gfx.raytracer.scene.scene.Scene;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 import javax.inject.Named;
 
@@ -37,13 +36,10 @@ public class RayTracerModule extends AbstractModule {
   @Provides
   @Singleton
   public RayTracerEngine getTracer(
-    final @Named("sourceFile") Optional<String> sourceFile,
+    final @Named("sourceFile") String filePath,
     final SceneParser parser,
     final EventBus rayTracingEventBus
   ) throws IOException {
-    final String filePath = sourceFile.orElseThrow(() ->
-      new IllegalArgumentException("Must supply a source file"));
-
     parser.parse(new String(Files.readAllBytes(Paths.get(filePath)), Charsets.UTF_8));
 
     final Scene parsed_scene = parser.getScene();
