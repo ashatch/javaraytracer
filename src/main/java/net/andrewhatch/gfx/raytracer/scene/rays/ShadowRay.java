@@ -11,7 +11,12 @@ public class ShadowRay extends Ray {
   public double light_brightness;
   private double attenuation;
 
-  public ShadowRay(Scene scene, Point origin, Vector dir, int depth) {
+  public ShadowRay(
+    Scene scene,
+    Point origin,
+    Vector dir,
+    int depth
+  ) {
     super(scene, origin, dir, depth);
     this.attenuation = 1.0;
   }

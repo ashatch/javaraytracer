@@ -16,10 +16,12 @@ import javax.inject.Named;
 
 public class Main {
   @Inject
-  public Main(final RayTracer rayTracer,
-              @Named("sourceFile") final Optional<String> sourceFile,
-              final HelpFormatter helpFormatter,
-              final Options options) throws IOException {
+  public Main(
+    final RayTracer rayTracer,
+    @Named("sourceFile") final Optional<String> sourceFile,
+    final HelpFormatter helpFormatter,
+    final Options options
+  ) throws IOException {
     if (sourceFile.isPresent()) {
       rayTracer.rayTraceFilePath();
     } else {
@@ -29,8 +31,8 @@ public class Main {
 
   public static void main(String[] args) {
     Guice.createInjector(
-        new CliModule(args),
-        new RayTracerModule()
+      new CliModule(args),
+      new RayTracerModule()
     ).getInstance(Main.class);
   }
 }

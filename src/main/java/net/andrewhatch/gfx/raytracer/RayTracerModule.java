@@ -36,33 +36,43 @@ public class RayTracerModule extends AbstractModule {
 
   @Provides
   @Singleton
-  public RayTracerEngine getTracer(final @Named("sourceFile") Optional<String> sourceFile,
-                                   final SceneParser parser,
-                                   final EventBus rayTracingEventBus) throws IOException {
+  public RayTracerEngine getTracer(
+    final @Named("sourceFile") Optional<String> sourceFile,
+    final SceneParser parser,
+    final EventBus rayTracingEventBus
+  ) throws IOException {
     final String filePath = sourceFile.orElseThrow(() ->
-        new IllegalArgumentException("Must supply a source file"));
+      new IllegalArgumentException("Must supply a source file"));
 
     parser.parse(new String(Files.readAllBytes(Paths.get(filePath)), Charsets.UTF_8));
 
     final Scene parsed_scene = parser.getScene();
     final Camera camera = parser.getCamera();
 
-    final RayTracerEngine tracer = new RayTracerEngine(rayTracingEventBus, parsed_scene, camera);
+    final RayTracerEngine tracer = new RayTracerEngine(
+      rayTracingEventBus,
+      parsed_scene,
+      camera);
+
     tracer.setSuperSampling(parsed_scene.isSuperSampling());
     return tracer;
   }
 
   @Provides
   @Singleton
-  public RayTracerDisplayer displayer(final RayTracerDisplay display,
-                                      final @Named("saveImage") boolean saveImage) {
+  public RayTracerDisplayer displayer(
+    final RayTracerDisplay display,
+    final @Named("saveImage") boolean saveImage
+  ) {
     return new RayTracerDisplayer(display, saveImage);
   }
 
   @Provides
   @Singleton
-  public TracedImageProducer rayTracedImageProducer(final RayTracerEngine engine,
-                                                    final EventBus eventBus) {
+  public TracedImageProducer rayTracedImageProducer(
+    final RayTracerEngine engine,
+    final EventBus eventBus
+  ) {
     final TracedImageProducer tracedImageProducer = new TracedImageProducer(engine);
     eventBus.register(tracedImageProducer);
     return tracedImageProducer;
@@ -70,8 +80,10 @@ public class RayTracerModule extends AbstractModule {
 
   @Provides
   @Singleton
-  public RayTracerDisplay rayTracerDisplay(final RayTracerEngine rayTracerEngine,
-                                           final TracedImageProducer imageProducer) {
+  public RayTracerDisplay rayTracerDisplay(
+    final RayTracerEngine rayTracerEngine,
+    final TracedImageProducer imageProducer
+  ) {
     return new RayTracerDisplay(rayTracerEngine, imageProducer);
   }
 }

@@ -10,7 +10,14 @@ public class OpticalProperties {
   public double diffusion;
   public boolean luminous;
 
-  public OpticalProperties(Colour c, double refra, double transp, double refle, double diffu, boolean lumin) {
+  public OpticalProperties(
+    Colour c,
+    double refra,
+    double transp,
+    double refle,
+    double diffu,
+    boolean lumin
+  ) {
     set(c, refra, transp, refle, diffu, lumin);
   }
 

@@ -24,8 +24,10 @@ public class RayTracerDisplayer {
   private RayTracerDisplay display;
 
   @Inject
-  public RayTracerDisplayer(final RayTracerDisplay rayTracerDisplay,
-                            final boolean saveImage) {
+  public RayTracerDisplayer(
+    final RayTracerDisplay rayTracerDisplay,
+    final boolean saveImage
+  ) {
     this.saveImage = saveImage;
     this.display = rayTracerDisplay;
   }

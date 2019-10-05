@@ -8,9 +8,11 @@ public class RayTraceStarted {
   private final Scene scene;
   private final Camera camera;
 
-  public RayTraceStarted(final Scene scene,
-                         final Camera camera,
-                         long nanoTime) {
+  public RayTraceStarted(
+    final Scene scene,
+    final Camera camera,
+    long nanoTime
+  ) {
     this.scene = scene;
     this.camera = camera;
     this.nanoTime = nanoTime;

@@ -15,10 +15,12 @@ public class Ray {
   protected int depth;
   protected RayHitInfo closestHit = new RayHitInfo();
 
-  public Ray(final Scene scene,
-             final Point origin,
-             final Vector direction,
-             final int depth) {
+  public Ray(
+    final Scene scene,
+    final Point origin,
+    final Vector direction,
+    final int depth
+  ) {
     this.scene = scene;
     this.origin = origin;
     this.direction = direction;
@@ -47,10 +49,10 @@ public class Ray {
 
   public void fire(final Colour c) {
     scene.getSceneObjects()
-        .stream()
-        .map(obj -> obj.intersect(this))
-        .filter(hit -> hit != null)
-        .forEach(hit -> this.processHit(hit));
+      .stream()
+      .map(obj -> obj.intersect(this))
+      .filter(hit -> hit != null)
+      .forEach(hit -> this.processHit(hit));
 
     shade(c);
   }

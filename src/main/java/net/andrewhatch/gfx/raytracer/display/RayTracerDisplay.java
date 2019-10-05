@@ -21,8 +21,10 @@ public class RayTracerDisplay extends JPanel {
   private FontMetrics fm;
   private Vector<String> messages = new Vector<>();
 
-  public RayTracerDisplay(final RayTracerEngine rayTracerEngine,
-                          final TracedImageProducer imageProducer) {
+  public RayTracerDisplay(
+    final RayTracerEngine rayTracerEngine,
+    final TracedImageProducer imageProducer
+  ) {
     super();
     this.rayTracerEngine = rayTracerEngine;
     this.imageProducer = imageProducer;
@@ -56,8 +58,8 @@ public class RayTracerDisplay extends JPanel {
     rayTracedImage = createImage(imageProducer);
 
     buf_img = new BufferedImage(rayTracerEngine.getWidth(),
-        rayTracerEngine.getHeight(),
-        BufferedImage.TYPE_INT_RGB);
+      rayTracerEngine.getHeight(),
+      BufferedImage.TYPE_INT_RGB);
 
     off_gfx = buf_img.getGraphics();
     fm = g.getFontMetrics(info_font);

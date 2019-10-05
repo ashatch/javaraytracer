@@ -24,10 +24,12 @@ public class RayTracer {
   private RayTracerDisplayer rayTracerDisplayer;
 
   @Inject
-  public RayTracer(final RayTracerEngine rayTracerEngine,
-                   final RayTracerDisplayer displayer,
-                   final EventBus eventBus,
-                   final @Named("displayImage") boolean displayImage) {
+  public RayTracer(
+    final RayTracerEngine rayTracerEngine,
+    final RayTracerDisplayer displayer,
+    final EventBus eventBus,
+    final @Named("displayImage") boolean displayImage
+  ) {
     this.rayTracerEngine = rayTracerEngine;
     this.rayTracerDisplayer = displayer;
     this.displayImage = displayImage;

@@ -70,12 +70,12 @@ public class CliModule extends AbstractModule {
     final Options options = new Options();
 
     options.addOption(Option.builder(OPTION_SAVE_SHORT)
-        .longOpt(OPTION_SAVE)
-        .build());
+      .longOpt(OPTION_SAVE)
+      .build());
 
     options.addOption(Option.builder(OPTION_DISPLAY_SHORT)
-        .longOpt(OPTION_DISPLAY)
-        .build());
+      .longOpt(OPTION_DISPLAY)
+      .build());
 
     return options;
   }

@@ -35,7 +35,11 @@ public class Colour {
       total_b += array[i].b;
     }
 
-    Colour c = new Colour(total_r / array.length, total_g / array.length, total_b / array.length);
+    Colour c = new Colour(
+      total_r / array.length,
+      total_g / array.length,
+      total_b / array.length);
+
     return c;
   }
 
@@ -75,9 +79,9 @@ public class Colour {
     int _b = (int) Math.ceil(this.b * 255);
 
     return (255 << 24) |
-        (_r > 255 ? 255 : _r) << 16 |
-        (_g > 255 ? 255 : _g) << 8 |
-        (_b > 255 ? 255 : _b);
+      (_r > 255 ? 255 : _r) << 16 |
+      (_g > 255 ? 255 : _g) << 8 |
+      (_b > 255 ? 255 : _b);
   }
 
   public String toString() {

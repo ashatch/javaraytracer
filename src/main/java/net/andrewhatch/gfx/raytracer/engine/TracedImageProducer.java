@@ -20,7 +20,9 @@ public class TracedImageProducer implements ImageProducer {
   }
 
   @Override
-  public void addConsumer(final ImageConsumer ic) {
+  public void addConsumer(
+    final ImageConsumer ic
+  ) {
     consumer = ic;
     consumer.setColorModel(ColorModel.getRGBdefault());
     consumer.setDimensions(engine.getWidth(), engine.getHeight());
@@ -49,7 +51,17 @@ public class TracedImageProducer implements ImageProducer {
   @Override
   public void requestTopDownLeftRightResend(final ImageConsumer ic) {
     ic.setHints(ImageConsumer.TOPDOWNLEFTRIGHT);
-    ic.setPixels(0, 0, engine.getWidth(), lines_produced, ColorModel.getRGBdefault(), engine.getPixels().getPixels(), 0, engine.getWidth());
+    ic.setPixels(
+      0,
+      0,
+      engine.getWidth(),
+      lines_produced,
+      ColorModel.getRGBdefault(),
+      engine.getPixels().getPixels(),
+      0,
+      engine.getWidth()
+    );
+
     lines_consumed = lines_produced;
     if (lines_produced == engine.getHeight()) {
       ic.imageComplete(ImageConsumer.STATICIMAGEDONE);
@@ -63,14 +75,14 @@ public class TracedImageProducer implements ImageProducer {
       // give pixels to the consumer
 
       consumer.setPixels(
-          0,                // starting x
-          lines_consumed,          // starting y
-          engine.getWidth(),              // width
-          lines_produced - lines_consumed,// height
-          ColorModel.getRGBdefault(),  // color model
-          engine.getPixels().getPixels(),            // array of imagePixels
-          lines_consumed * engine.getWidth(),    // offset into array
-          engine.getWidth());              // line width
+        0,                // starting x
+        lines_consumed,          // starting y
+        engine.getWidth(),              // width
+        lines_produced - lines_consumed,// height
+        ColorModel.getRGBdefault(),  // color model
+        engine.getPixels().getPixels(),            // array of imagePixels
+        lines_consumed * engine.getWidth(),    // offset into array
+        engine.getWidth());              // line width
 
       lines_consumed = lines_produced;
 

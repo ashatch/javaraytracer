@@ -19,15 +19,18 @@ import java.util.List;
 public class PhongShader extends Shader {
 
   protected Point intersect;
-  // Secondary rays
   private Ray reflectedRay;
   private RefractedRay refractedRay;
-  // geometry
   private Vector normal;
   private List<ShadowRay> shadowRays = new ArrayList<ShadowRay>();
   private double cosine;
 
-  public PhongShader(Scene scene, Ray incident_ray, RayHitInfo hit, SceneObject obj) {
+  public PhongShader(
+    Scene scene,
+    Ray incident_ray,
+    RayHitInfo hit,
+    SceneObject obj
+  ) {
     super(scene, incident_ray, obj);
     this.intersect = hit.intersect;
     this.normal = hit.normal;
@@ -68,7 +71,13 @@ public class PhongShader extends Shader {
     if (opticalProperties.transparency > 0.0) {
       Vector ref = refract();
       if (ref.nonzero()) {
-        refractedRay = new RefractedRay(scene, intersect, ref, depth + 1, opticalProperties.refractiveness);
+        refractedRay = new RefractedRay(
+          scene,
+          intersect,
+          ref,
+          depth + 1,
+          opticalProperties.refractiveness);
+
       }
     }
   }

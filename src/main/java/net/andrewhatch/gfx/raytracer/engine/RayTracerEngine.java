@@ -31,9 +31,11 @@ public class RayTracerEngine {
   private double percent_complete = 0.0;
   private int currentLine = 0;
 
-  public RayTracerEngine(final EventBus rayTracingEventBus,
-                         final Scene scene,
-                         final Camera camera) {
+  public RayTracerEngine(
+    final EventBus rayTracingEventBus,
+    final Scene scene,
+    final Camera camera
+  ) {
     this.rayTracingEventBus = rayTracingEventBus;
     this.scene = scene;
     this.camera = camera;
@@ -87,15 +89,18 @@ public class RayTracerEngine {
   }
 
   private void notifyRayTraceStarted() {
-    rayTracingEventBus.post(new RayTraceStarted(this.scene, this.camera, System.nanoTime()));
+    rayTracingEventBus.post(
+      new RayTraceStarted(this.scene, this.camera, System.nanoTime()));
   }
 
   private void notifyRayTracedALine(final int line) {
-    rayTracingEventBus.post(new RayTracedLine(line));
+    rayTracingEventBus.post(
+      new RayTracedLine(line));
   }
 
   private void notifyRayTraceFinished() {
-    rayTracingEventBus.post(new RayTraceFinished(System.nanoTime()));
+    rayTracingEventBus.post(
+      new RayTraceFinished(System.nanoTime()));
   }
 
   public boolean isFinished() {
