@@ -147,7 +147,7 @@ AssignOp: '=';
 LeftBrace: '{';
 RightBrace: '}';
 
-Camera: '†';
+Camera: 'Σ';
 Light: '☼';
 Sphere: '◯';
 Plane: '▭';

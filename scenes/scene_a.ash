@@ -34,6 +34,15 @@ optics:greensphere {
     luminous no;
 }
 
+optics:purplesphere {
+    colour 0.7 0.2 0.7;
+    refraction 0.0;
+    transparency 0.0;
+    reflection 0.0;
+    diffusion 0.6;
+    luminous no;
+}
+
 optics:clearsphere {
     colour 1.0 1.0 1.0;
     refraction 0.98;
@@ -52,12 +61,12 @@ optics:greyfloor {
     luminous no;
 }
 
-† {
-    size 600 400;
+Σ {
+    size 1200 800;
     → 0.0 100.0 -600.000;
     lookAt 0.0 30.0 0.0;
     ambience 0.1 0.1 0.1;
-    maxDepth 8;
+    maxDepth 16;
 }
 
 ☼ {
@@ -77,6 +86,12 @@ optics:greyfloor {
     λ greensphere;
     → -100.0 -50.0 100.0;
     Ø 160.0;
+}
+
+◯ {
+    λ purplesphere;
+    → -210.0 -20.0 -20.0;
+    Ø 120.0;
 }
 
 ◯ {
