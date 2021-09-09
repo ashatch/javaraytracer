@@ -8,7 +8,7 @@ Phong shading with reflection and refraction.
 ## Build and run
 
 ```bash
-mvn clean package
+./mvnw clean package
 java -jar target/javaraytracer-1.0.0-SNAPSHOT.jar scenes/scene_a.ash --display
 ```
 
